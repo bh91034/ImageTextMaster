@@ -2,11 +2,13 @@ import glob
 
 ext = ['png', 'jpg', 'gif']    # Add image formats here
 class DataManager:
-    global images, target_folder
+    images = None
+    target_folder = None
     def __init__(self, target_folder='./images'):
         print ('[DataManager.__init__] created')
         self.target_folder = target_folder
         self.reset(target_folder)
+        DataManager.target_folder = target_folder
     
     def reset(self, target_folder='./images'):
         print ('[DataManager.reset] reset, target=', target_folder)
