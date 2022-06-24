@@ -9,6 +9,7 @@ from ITM.Data.DataManager import DataManager
 #------------------------------------------------------------------------------
 class TopFrame:
     root = None
+    label_curr_folder_name = None
     def __init__(self, root):
         # top buttons frame
         top_frm = tk.Frame(root)
@@ -23,6 +24,8 @@ class TopFrame:
         label_curr_folder_title = ttk.Label(top_frm, text='작업 폴더:')
         label_curr_folder_name = ttk.Label(top_frm, text=DataManager.target_folder)
 
+        TopFrame.label_curr_folder_name = label_curr_folder_name
+
         # top buttons : '결과 저장'
         btn_save_img = ttk.Button(top_frm, text='결과 저장')
 
@@ -34,3 +37,7 @@ class TopFrame:
         btn_save_img.pack(side='right')
 
         TopFrame.root = top_frm
+    
+    @classmethod
+    def changeWorkFolder(cls, work_dir):
+        cls.label_curr_folder_name.config(text=work_dir)
