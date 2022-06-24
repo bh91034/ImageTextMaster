@@ -1,33 +1,8 @@
-import tkinter as tk
-from tkinter import END, scrolledtext
-from tkinter import ttk
-from turtle import bgcolor
-from PIL import ImageTk, Image
+from ITM.Frame.FrameManager import FrameManager
+from ITM.Data.DataManager import DataManager
+from ITM.Control.ControlManager import ControlManager
 
-# root window
-root = tk.Tk()
-root.geometry('1200x600+20+20')
-#root.resizable(False, False)
-root.title('Button Demo')
-
-#------------------------------------------------------------------------------
-# Top frame : top side buttons layout and command handlers
-#------------------------------------------------------------------------------
-from ITM.Frame.TopFrame import TopFrame
-top_frm = TopFrame(root)
-
-#------------------------------------------------------------------------------
-# Middle frame : middle side canvases
-#------------------------------------------------------------------------------
-from ITM.Frame.MiddleFrame import MiddleFrame
-mid_frm = MiddleFrame(root)
-
-#------------------------------------------------------------------------------
-# Low frame : low side tabbed pane (tools)
-#------------------------------------------------------------------------------
-from ITM.Frame.LowFrame import LowFrame
-low_frm = LowFrame(root)
-
-
-
+data = DataManager('C:/Users/javaes/workspace/easy-ocr/ImageTextMagician/images/')
+control = ControlManager(data)
+root = FrameManager.init(control)
 root.mainloop()

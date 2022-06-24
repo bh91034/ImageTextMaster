@@ -18,11 +18,6 @@ class ScrollableChecklist(tk.Frame):
         self.vsb.pack(side="right", fill="y")
         self.text.pack(side="left", fill="both", expand=True)
 
-        # for i in range(4):
-        #     cb = tk.Checkbutton(self, text="checkbutton #%s" % i)
-        #     self.text.window_create("end", window=cb)
-        #     self.text.insert("end", "\n") # to force one checkbox per line
-
     def reset(self, text_list=None):
         self.text.delete('1.0', END)
 
@@ -44,11 +39,6 @@ class ScrollableCombobox(tk.Frame):
         self.vsb.config(command=self.text.yview)
         self.vsb.pack(side="right", fill="y")
         self.text.pack(side="left", fill="both", expand=True)
-
-        # for i in range(4):
-        #     cb = tk.Checkbutton(self, text="checkbutton #%s" % i)
-        #     self.text.window_create("end", window=cb)
-        #     self.text.insert("end", "\n") # to force one checkbox per line
 
     def reset(self, text_list=None):
         self.text.delete('1.0', END)
@@ -95,8 +85,6 @@ class LowFrame:
 
         remove_tab_down_frm = ttk.Frame(low_frm_remove_tab)
         remove_tab_down_frm.pack(padx=2, pady=2, fill='both', expand=True)
-
-
 
         remove_tab_text_list = ScrollableChecklist(remove_tab_down_frm)
         remove_tab_text_list.pack(side="top", fill="both", expand=True)
