@@ -51,6 +51,11 @@ class ScrollableCombobox(tk.Frame):
                 self.text.insert("end", "\n") # to force one checkbox per line
 
 class LowFrame:
+    remove_tab_text_list = None
+    write_tab_text_list = None
+    write_tab_text_org = None
+    write_tab_text_google = None
+    write_tab_text_final = None
     global low_frm
     def __init__(self, root):
         # create a notebook
@@ -87,8 +92,10 @@ class LowFrame:
         remove_tab_down_frm.pack(padx=2, pady=2, fill='both', expand=True)
 
         remove_tab_text_list = ScrollableChecklist(remove_tab_down_frm)
+
         remove_tab_text_list.pack(side="top", fill="both", expand=True)
         remove_tab_text_list.reset(1)
+        LowFrame.remove_tab_text_list = remove_tab_text_list
 
         #------------------------------------------------------------------------------
         # Low frame - write tab : low frame write tab controls
@@ -97,6 +104,8 @@ class LowFrame:
         write_tab_text_list = ScrollableCombobox(low_frm_write_tab)
         write_tab_text_list.pack(padx=2, pady=2, side="left", fill="y")
         write_tab_text_list.reset(1)
+
+        LowFrame.write_tab_text_list = write_tab_text_list
 
         # low frame write tab - [RIGHT] style tool and buttons
         a = ttk.Frame(low_frm_write_tab)
@@ -132,7 +141,7 @@ class LowFrame:
         write_tab_right_btn_cancel = ttk.Button(c, text='취소')
         write_tab_right_btn_cancel.pack(side='left')
 
-        # low frame write tab - translation tool
+        # low frame write tab - [CENTER] translation tool
         write_tab_trans_frm = ttk.LabelFrame(low_frm_write_tab, text="번역 도구")
         write_tab_trans_frm.pack(padx=2, pady=2, fill='both', side='top', expand=True)
         write_tab_trans_frm.columnconfigure(0, weight=1)
@@ -151,3 +160,27 @@ class LowFrame:
         write_tab_label_final.grid(column=0, row=4, sticky=tk.W)
         write_tab_text_final = tk.Text(write_tab_trans_frm, height=3)
         write_tab_text_final.grid(column=0, row=5, sticky=tk.W+tk.E+tk.N+tk.S)
+
+        LowFrame.write_tab_text_org = write_tab_text_org
+        LowFrame.write_tab_text_google = write_tab_text_google
+        LowFrame.write_tab_text_final = write_tab_text_final
+
+    @classmethod
+    def resetRemoveTabData(cls):
+        print ('[LowFrame.resetRemoveTabData] called...')
+        cls.remove_tab_text_list.reset(None)
+
+    @classmethod
+    def resetWriteTabData(cls):
+        print ('[LowFrame.resetWriteTabData] called...')
+
+        # clear test list found in the image
+        cls.write_tab_text_list.reset(None)
+
+        # clear 'translation tool' area
+        cls.write_tab_text_org.delete('1.0', END)
+        cls.write_tab_text_google.delete('1.0', END)
+        cls.write_tab_text_final.delete('1.0', END)
+
+        # TODO: clear 'style tool' area
+
