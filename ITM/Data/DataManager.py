@@ -7,12 +7,31 @@ class DataManager:
     images = None
     target_folder = None
     target_files = []
+    target_texts = []
     def __init__(self, target_folder='./images'):
         print ('[DataManager.__init__] created')
         self.target_folder = target_folder
         self.reset(target_folder)
         DataManager.target_folder = target_folder
     
+    @classmethod
+    def setTargetTexts(cls, curr_file, texts_info):
+        print ('[DataManager] setTargetTexts() called!!...')
+        i = cls.__getImageIndex(curr_file)
+        if i < 0:
+            return False
+        else:
+            print('[DataManager] setTargetTexts() : saved texts info, i=', i, ', texts_info=', texts_info)
+            cls.target_texts[i] = texts_info
+
+    @classmethod
+    def __getImageIndex(cls, curr_file):
+        print ('[DataManager] __getCurrImageIndex() called!!...')
+        for i in range(len(cls.target_files)):
+            if cls.target_files[i] == curr_file:
+                return i
+        return -1
+
     @classmethod
     def getNextImageFile(cls, curr_file):
         print ('[DataManager] getNextImageFile() called!!...')
@@ -53,3 +72,4 @@ class DataManager:
         cls.target_files = []
         [cls.target_files.extend(glob.glob(target_folder + '/' + '*.' + e)) for e in ext]
         print ('[DataManager.__loadImages] num images : ', len(cls.target_files))
+        cls.target_texts = [None] * len(cls.target_files)

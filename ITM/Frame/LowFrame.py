@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
 from tkinter import END, scrolledtext
+from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab
 
 #------------------------------------------------------------------------------
 # Low frame : low side tabbed pane (tools)
@@ -20,11 +21,11 @@ class ScrollableChecklist(tk.Frame):
 
     def reset(self, text_list=None):
         self.text.delete('1.0', END)
-
+        print ('[LowFrame.ScrollableChecklist] reset() called!!...')
+        print ('[LowFrame.ScrollableChecklist] reset() : text_list=', text_list)
         if text_list is not None:
-            for i in range(20):
-                cb = tk.Checkbutton(self, text="checkbutton #%s" % i)
-                
+            for t in text_list:
+                cb = tk.Checkbutton(self, text=t)
                 self.text.window_create("end", window=cb)
                 self.text.insert("end", "\n") # to force one checkbox per line
 
@@ -79,8 +80,9 @@ class LowFrame:
         #------------------------------------------------------------------------------
         remove_tab_up_frm = ttk.Frame(low_frm_remove_tab)
         remove_tab_up_frm.pack(padx=2, pady=2, fill='both', side='top')
-
-        remove_tab_btn_search_img = ttk.Button(remove_tab_up_frm, text='텍스트 찾기')
+        
+        #from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab
+        remove_tab_btn_search_img = ttk.Button(remove_tab_up_frm, text='텍스트 찾기', command=clickedTextSearchInRemoveTab)
         remove_tab_btn_remove_img = ttk.Button(remove_tab_up_frm, text='선택 지우기')
         remove_tab_btn_revoke_img = ttk.Button(remove_tab_up_frm, text='원상태 복원')
 
@@ -94,7 +96,7 @@ class LowFrame:
         remove_tab_text_list = ScrollableChecklist(remove_tab_down_frm)
 
         remove_tab_text_list.pack(side="top", fill="both", expand=True)
-        remove_tab_text_list.reset(1)
+        remove_tab_text_list.reset()
         LowFrame.remove_tab_text_list = remove_tab_text_list
 
         #------------------------------------------------------------------------------
@@ -166,9 +168,10 @@ class LowFrame:
         LowFrame.write_tab_text_final = write_tab_text_final
 
     @classmethod
-    def resetRemoveTabData(cls):
-        print ('[LowFrame.resetRemoveTabData] called...')
-        cls.remove_tab_text_list.reset(None)
+    def resetRemoveTabData(cls, texts=None):
+        print ('[LowFrame] resetRemoveTabData() called...')
+        print ('[LowFrame] resetRemoveTabData() : texts=', texts)
+        cls.remove_tab_text_list.reset(texts)
 
     @classmethod
     def resetWriteTabData(cls):
@@ -183,4 +186,3 @@ class LowFrame:
         cls.write_tab_text_final.delete('1.0', END)
 
         # TODO: clear 'style tool' area
-

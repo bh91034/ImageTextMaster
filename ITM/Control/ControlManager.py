@@ -5,10 +5,15 @@ from ITM.Frame.LowFrame import LowFrame
 from ITM.Frame.MiddleFrame import MiddleFrame
 from ITM.Frame.TopFrame import TopFrame
 
+import easyocr
+import os
+
 class ControlManager:
     work_file = None
+    easyocr_reader = None
     def __init__(self, data_manager):
         ControlManager.work_file = DataManager.target_files[0]
+        ControlManager.easyocr_reader = easyocr.Reader(['ch_sim','en']) # this needs to run only once to load the model into memory
 
     @classmethod
     def changedWorkImage(cls, work_img):
