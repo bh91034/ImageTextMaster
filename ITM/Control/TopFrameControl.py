@@ -2,6 +2,7 @@ import glob
 import tkinter
 from tkinter import messagebox as mb
 from tkinter import filedialog
+#from ITM.Control.ControlManager import ControlManager
 from ITM.Data.DataManager import DataManager
 
 def __checkWorkFolder(work_dir):
@@ -15,6 +16,36 @@ def __checkWorkFolder(work_dir):
     else:
         return True
 
+def clickedPrevImage():
+    print ('[TopFrameControl] clickedPrevImage() called!!...')
+    from ITM.Control.ControlManager import ControlManager
+    work_file = ControlManager.work_file
+    if work_file == None:
+        mb.showerror("에러", "현재 작업중인 이미지 파일이 없습니다")
+        return
+    prev_img = DataManager.getPrevImageFile(work_file)
+    print ('[TopFrameControl] clickedPrevImage() : prev image = ', prev_img)
+    if prev_img == None:
+        mb.showerror("에러", "현재 이미지 파일이 첫번째 이미지 파일입니다")
+        return
+    ControlManager.changedWorkImage(prev_img)
+    
+
+def clickedNextImage():
+    print ('[TopFrameControl] clickedNextImage() called!!...')
+    from ITM.Control.ControlManager import ControlManager
+    work_file = ControlManager.work_file
+    if work_file == None:
+        mb.showerror("에러", "현재 작업중인 이미지 파일이 없습니다")
+        return
+    next_img = DataManager.getNextImageFile(work_file)
+    print ('[TopFrameControl] clickedNextImage() : next image = ', next_img)
+    if next_img == None:
+        mb.showerror("에러", "더이상 이미지 파일이 없습니다")
+        return
+    ControlManager.changedWorkImage(next_img)
+
+
 def clickedChangeFolder():
     print ('[TopFrameControl] clickedChangeFolder() called!!...')
     from ITM.Frame.TopFrame import TopFrame
@@ -22,7 +53,7 @@ def clickedChangeFolder():
     print("##> dir_path : ", dir_path)
     print("##> TopFrame.root : ", TopFrame.root)
     from ITM.Control.ControlManager import ControlManager
-    if __checkWorkFolder(dir_path):\
+    if __checkWorkFolder(dir_path):
             ControlManager.changedWorkFolder(dir_path)
     
 
