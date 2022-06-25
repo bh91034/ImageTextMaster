@@ -12,8 +12,8 @@ class ControlManager:
         ControlManager.work_file = DataManager.target_files[0]
 
     @classmethod
-    def changedWorkImage(cls, work_img):
-        print ('[ControlManager.changedWorkImage] work_img=', work_img)
+    def changedWorkImage(cls, work_file):
+        print ('[ControlManager.changedWorkImage] work_img=', work_file)
         # clear all data in 'remove tab' of 'LowFrame'
         LowFrame.resetRemoveTabData()
 
@@ -21,11 +21,11 @@ class ControlManager:
         LowFrame.resetWriteTabData()
 
         # change images in cavases of 'MiddleFrame' with the 1st image of new dir
-        MiddleFrame.resetCanvasImages(work_img)
-        cls.work_file = work_img
+        MiddleFrame.resetCanvasImages(work_file)
+        cls.work_file = work_file
 
         # set new dir to 'TopFrame' at the label displaying work dir
-        TopFrame.changeWorkFile(work_img)
+        TopFrame.changeWorkFile(work_file)
 
     @classmethod
     def changedWorkFolder(cls, work_dir):
@@ -34,16 +34,8 @@ class ControlManager:
         # set new dir to 'DataManager' and make DataManager to reload image list
         DataManager.reset(work_dir)
 
-        # clear all data in 'remove tab' of 'LowFrame'
-        LowFrame.resetRemoveTabData()
-
-        # clear all data in 'write tab' of 'LowFrame'
-        LowFrame.resetWriteTabData()
-
-        # change images in cavases of 'MiddleFrame' with the 1st image of new dir
+        # set current work file
         work_file = DataManager.target_files[0]
-        MiddleFrame.resetCanvasImages(work_file)
-        cls.work_file = work_file
-
-        # set new dir to 'TopFrame' at the label displaying work dir
-        TopFrame.changeWorkFile(work_file)
+        
+        # change image in frames
+        cls.changedWorkImage(work_file)
