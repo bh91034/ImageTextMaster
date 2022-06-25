@@ -1,4 +1,5 @@
 import glob
+import easyocr
 
 from matplotlib.pyplot import cla
 
@@ -8,16 +9,29 @@ class DataManager:
     target_folder = None
     target_files = []
     target_texts = []
+    easyocr_reader = None
+
     def __init__(self, target_folder='./images'):
         print ('[DataManager.__init__] created')
         self.target_folder = target_folder
         self.reset(target_folder)
         DataManager.target_folder = target_folder
+        DataManager.easyocr_reader = easyocr.Reader(['ch_sim','en']) # this needs to run only once to load the model into memory
     
+    @classmethod
+    def readTextsInImage(cls, curr_file):
+        print ('[DataManager] readTextsInImage() called!!...')
+        texts_info = cls.easyocr_reader.readtext(curr_file)
+        if texts_info == None:
+            return None
+        cls.setTargetTexts(curr_file, texts_info)
+        texts = [t[1] for t in texts_info]
+        return texts
+
     @classmethod
     def setTargetTexts(cls, curr_file, texts_info):
         print ('[DataManager] setTargetTexts() called!!...')
-        i = cls.__getImageIndex(curr_file)
+        i = cls.getImageIndex(curr_file)
         if i < 0:
             return False
         else:
@@ -25,8 +39,8 @@ class DataManager:
             cls.target_texts[i] = texts_info
 
     @classmethod
-    def __getImageIndex(cls, curr_file):
-        print ('[DataManager] __getCurrImageIndex() called!!...')
+    def getImageIndex(cls, curr_file):
+        print ('[DataManager] getImageIndex() called!!...')
         for i in range(len(cls.target_files)):
             if cls.target_files[i] == curr_file:
                 return i
