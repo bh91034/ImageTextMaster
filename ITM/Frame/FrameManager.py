@@ -8,7 +8,7 @@ class FrameManager:
         # root window
         root = tk.Tk()
         root.geometry('1200x600+20+20')
-        root.title('Button Demo')
+        root.title('Image Text Master')
 
         # Top frame : top side buttons layout and command handlers
         from ITM.Frame.TopFrame import TopFrame
