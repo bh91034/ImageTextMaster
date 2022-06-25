@@ -1,6 +1,8 @@
 import glob
 import os
 
+from h11 import Data
+
 from ITM.Data.DataManager import DataManager
 from ITM.Frame.LowFrame import LowFrame
 from ITM.Frame.MiddleFrame import MiddleFrame
@@ -26,6 +28,10 @@ class ControlManager:
 
         # set new dir to 'TopFrame' at the label displaying work dir
         TopFrame.changeWorkFile(work_file)
+
+        # set texts to remove tab in 'LowFrame'
+        texts = DataManager.getTextsInImage(work_file)
+        LowFrame.resetRemoveTabData(texts)
 
     @classmethod
     def changedWorkFolder(cls, work_dir):

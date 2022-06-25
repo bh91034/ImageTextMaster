@@ -15,6 +15,8 @@ def clickedTextSearchInRemoveTab():
 
     # read texts in image
     texts = DataManager.readTextsInImage(ControlManager.work_file)
+    if texts == None:
+        return
 
     # set texts in data area of LowFrame's remove tab
     from ITM.Frame.LowFrame import LowFrame
