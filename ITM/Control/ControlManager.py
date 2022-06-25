@@ -2,6 +2,7 @@ import glob
 
 from ITM.Data.DataManager import DataManager
 from ITM.Frame.LowFrame import LowFrame
+from ITM.Frame.MiddleFrame import MiddleFrame
 from ITM.Frame.TopFrame import TopFrame
 
 class ControlManager:
@@ -25,5 +26,6 @@ class ControlManager:
         LowFrame.resetWriteTabData()
 
         # TODO: change images in cavases of 'MiddleFrame' with the 1st image of new dir
-
+        work_file = DataManager.target_files[0]
+        MiddleFrame.resetCanvasImages(work_file)
             
