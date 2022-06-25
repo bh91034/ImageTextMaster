@@ -44,6 +44,7 @@ class MiddleFrame:
         mid_frm.columnconfigure((0,1), weight=1)
         mid_frm.rowconfigure(0, weight=1)
 
+    # TODO: why those variables could not be inside the method? (canvas doesn't display)
     bg_left = None
     new_bg_left = None
     bg_right = None
