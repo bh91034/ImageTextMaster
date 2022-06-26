@@ -2,7 +2,6 @@ import glob
 import tkinter
 from tkinter import messagebox as mb
 from tkinter import filedialog
-#from ITM.Control.ControlManager import ControlManager
 from ITM.Data.DataManager import DataManager
 
 def __checkWorkFolder(work_dir):

@@ -1,8 +1,6 @@
 import glob
 import easyocr
 
-from matplotlib.pyplot import cla
-
 ext = ['png', 'jpg', 'gif']    # Add image formats here
 class DataManager:
     images = None
