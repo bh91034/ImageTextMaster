@@ -25,12 +25,16 @@ class MiddleFrame:
         left_canvas.grid(row=0, column=0, sticky=tk.E+tk.W+tk.N+tk.S)
         right_canvas = tk.Canvas(mid_frm, bg='lightgray')
         right_canvas.grid(row=0, column=1, sticky=tk.E+tk.W+tk.N+tk.S)
-        MiddleFrame.src_image = Image.open(ControlManager.work_file)
-        MiddleFrame.out_image = Image.open(DataManager.getOutputFile(ControlManager.work_file))
+
+        src_file = ControlManager.work_file
+        out_file = DataManager.getOutputFile(ControlManager.work_file)
+
+        MiddleFrame.src_image = Image.open(src_file)
+        MiddleFrame.out_image = Image.open(out_file)
         MiddleFrame.left_canvas = left_canvas
         MiddleFrame.right_canvas = right_canvas
-        MiddleFrame.src_photoimage = ImageTk.PhotoImage(file=ControlManager.work_file)
-        MiddleFrame.out_photoimage = ImageTk.PhotoImage(file=ControlManager.work_file)
+        MiddleFrame.src_photoimage = ImageTk.PhotoImage(file=src_file)
+        MiddleFrame.out_photoimage = ImageTk.PhotoImage(file=out_file)
 
         # Reference :
         # - https://www.youtube.com/watch?v=xiGQD2J47nA
