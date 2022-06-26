@@ -10,9 +10,9 @@ class MiddleFrame:
     global mid_frm
     left_canvas = None
     right_canvas = None
-    left_image = None
-    right_image = None
-    work_image = None
+    src_photoimage = None
+    out_photoimage = None
+    src_image = None
 
     def __init__(self, root):
         from ITM.Control.ControlManager import ControlManager
@@ -20,16 +20,15 @@ class MiddleFrame:
         mid_frm = tk.Frame(root)
         mid_frm.pack(padx=2, pady=2, fill='both', expand=True)
 
-        bg = ImageTk.PhotoImage(file=ControlManager.work_file)
         left_canvas = tk.Canvas(mid_frm, bg='lightgray')
         left_canvas.grid(row=0, column=0, sticky=tk.E+tk.W+tk.N+tk.S)
         right_canvas = tk.Canvas(mid_frm, bg='lightgray')
         right_canvas.grid(row=0, column=1, sticky=tk.E+tk.W+tk.N+tk.S)
-        MiddleFrame.work_image = Image.open(ControlManager.work_file)
+        MiddleFrame.src_image = Image.open(ControlManager.work_file)
         MiddleFrame.left_canvas = left_canvas
         MiddleFrame.right_canvas = right_canvas
-        MiddleFrame.left_image = bg
-        MiddleFrame.right_image = bg
+        MiddleFrame.src_photoimage = ImageTk.PhotoImage(file=ControlManager.work_file)
+        MiddleFrame.out_photoimage = ImageTk.PhotoImage(file=ControlManager.work_file)
 
         # Reference :
         # - https://www.youtube.com/watch?v=xiGQD2J47nA
@@ -59,8 +58,8 @@ class MiddleFrame:
         # variables
         left_canvas = cls.left_canvas
         right_canvas = cls.right_canvas
-        left_image = cls.left_image
-        right_image = cls.right_image
+        left_image = cls.src_photoimage
+        right_image = cls.out_photoimage
         bg_left = cls.bg_left
         new_bg_left = cls.new_bg_left
         bg_right = cls.bg_right
@@ -80,8 +79,8 @@ class MiddleFrame:
             left_canvas.create_image(0,0, image=left_image, anchor="nw")
             right_canvas.create_image(0,0, image=right_image, anchor="nw")
         else:
-            left_image_resize = MiddleFrame.work_image
-            right_image_resize = MiddleFrame.work_image
+            left_image_resize = MiddleFrame.src_image
+            right_image_resize = MiddleFrame.src_image
 
             w1, h1 = left_image_resize.size
             w, h = cls.getAdaptedImageSize(w1, h1, canvas_w, canvas_h)
@@ -128,11 +127,11 @@ class MiddleFrame:
         # clear canvases
         cls.left_canvas.delete("all")
         cls.right_canvas.delete("all")
-        cls.left_image = None
-        cls.right_image = None
+        cls.src_photoimage = None
+        cls.out_photoimage = None
 
         # load new images and draw them to canvases
-        cls.work_image = Image.open(work_image)
-        cls.left_image = ImageTk.PhotoImage(file=work_image)
-        cls.right_image = ImageTk.PhotoImage(file=work_image)
+        cls.src_image = Image.open(work_image)
+        cls.src_photoimage = ImageTk.PhotoImage(file=work_image)
+        cls.out_photoimage = ImageTk.PhotoImage(file=work_image)
         cls.resizeCanvasImages()
