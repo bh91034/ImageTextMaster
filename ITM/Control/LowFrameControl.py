@@ -29,6 +29,9 @@ def clickedTextSearchInRemoveTab():
     # check if text search has been done already
     from ITM.Data.DataManager import DataManager
     i = DataManager.getImageIndex(ControlManager.work_file)
+    if DataManager.target_texts[i] != None:
+        mb.showwarning("Warning", "이미 text를 읽었습니다")
+        return
 
     # read texts in image
     texts = DataManager.readTextsInImage(ControlManager.work_file)
