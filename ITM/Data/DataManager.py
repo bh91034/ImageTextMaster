@@ -1,4 +1,4 @@
-import glob
+import glob, os
 import easyocr
 
 ext = ['png', 'jpg', 'gif']    # Add image formats here
@@ -84,8 +84,8 @@ class DataManager:
     @classmethod
     def reset(cls, target_folder='./images'):
         print ('[DataManager.reset] reset, target=', target_folder)
-        cls.target_folder = target_folder
-        cls.__loadImages(target_folder)
+        cls.target_folder = os.path.abspath(target_folder)
+        cls.__loadImages(cls.target_folder)
     
     @classmethod
     def __loadImages(cls, target_folder):
