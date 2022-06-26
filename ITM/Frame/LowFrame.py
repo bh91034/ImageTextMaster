@@ -7,11 +7,16 @@ from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab
 #------------------------------------------------------------------------------
 # Low frame : low side tabbed pane (tools)
 #------------------------------------------------------------------------------
-class ScrollableChecklist(tk.Frame):
-    def __init__(self, root, *args, **kwargs):
+from enum import Enum, auto
+class ScrollableListType(Enum):
+    CHECK_BUTTON = auto()
+    RADIO_BUTTON = auto()
+
+class ScrollableList(tk.Frame):
+    def __init__(self, root, list_type, *args, **kwargs):
         tk.Frame.__init__(self, root, *args, **kwargs)
         self.root = root
-
+        self.list_type = list_type
         self.vsb = ttk.Scrollbar(self, orient="vertical")
         self.text = tk.Text(self, width=40, height=20, 
                             yscrollcommand=self.vsb.set)
@@ -21,35 +26,19 @@ class ScrollableChecklist(tk.Frame):
 
     def reset(self, text_list=None):
         self.text.delete('1.0', END)
-        print ('[LowFrame.ScrollableChecklist] reset() called!!...')
-        print ('[LowFrame.ScrollableChecklist] reset() : text_list=', text_list)
+        print ('[LowFrame.ScrollableList] reset() called!!...')
+        print ('[LowFrame.ScrollableList] reset() : text_list=', text_list)
         if text_list is not None:
             for t in text_list:
-                cb = tk.Checkbutton(self, text=t)
+                if self.list_type == ScrollableListType.CHECK_BUTTON:
+                    cb = tk.Checkbutton(self, text=t)
+                elif self.list_type == ScrollableListType.RADIO_BUTTON:
+                    cb = tk.Radiobutton(self, text=t)
+                else:
+                    cb = tk.Checkbutton(self, text=t)
                 self.text.window_create("end", window=cb)
                 self.text.insert("end", "\n") # to force one checkbox per line
 
-class ScrollableCombobox(tk.Frame):
-    def __init__(self, root, *args, **kwargs):
-        tk.Frame.__init__(self, root, *args, **kwargs)
-        self.root = root
-
-        self.vsb = ttk.Scrollbar(self, orient="vertical")
-        self.text = tk.Text(self, width=40, height=20, 
-                            yscrollcommand=self.vsb.set)
-        self.vsb.config(command=self.text.yview)
-        self.vsb.pack(side="right", fill="y")
-        self.text.pack(side="left", fill="both", expand=True)
-
-    def reset(self, text_list=None):
-        self.text.delete('1.0', END)
-
-        if text_list is not None:
-            for i in range(20):
-                #cb = ttk.Combobox(self, text="checkbutton #%s" % i)
-                cb = ttk.Radiobutton(self, text="checkbutton #%s" % i)
-                self.text.window_create("end", window=cb)
-                self.text.insert("end", "\n") # to force one checkbox per line
 
 class LowFrame:
     remove_tab_text_list = None
@@ -93,7 +82,7 @@ class LowFrame:
         remove_tab_down_frm = ttk.Frame(low_frm_remove_tab)
         remove_tab_down_frm.pack(padx=2, pady=2, fill='both', expand=True)
 
-        remove_tab_text_list = ScrollableChecklist(remove_tab_down_frm)
+        remove_tab_text_list = ScrollableList(remove_tab_down_frm, ScrollableListType.CHECK_BUTTON)
 
         remove_tab_text_list.pack(side="top", fill="both", expand=True)
         remove_tab_text_list.reset()
@@ -103,9 +92,9 @@ class LowFrame:
         # Low frame - write tab : low frame write tab controls
         #------------------------------------------------------------------------------
         # low frame write tab - [LEFT] text list
-        write_tab_text_list = ScrollableCombobox(low_frm_write_tab)
+        write_tab_text_list = ScrollableList(low_frm_write_tab, ScrollableListType.RADIO_BUTTON)
         write_tab_text_list.pack(padx=2, pady=2, side="left", fill="y")
-        write_tab_text_list.reset(1)
+        write_tab_text_list.reset()
 
         LowFrame.write_tab_text_list = write_tab_text_list
 
