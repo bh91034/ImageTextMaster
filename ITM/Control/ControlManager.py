@@ -36,7 +36,7 @@ class ControlManager:
         print ('[ControlManager.changedWorkFolder] work_dir=', work_dir)
 
         # set new dir to 'DataManager' and make DataManager to reload image list
-        DataManager.reset(work_dir)
+        DataManager.resetWorkFolder(work_dir)
 
         # set current work file
         work_file = DataManager.target_files[0]

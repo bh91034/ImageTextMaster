@@ -14,7 +14,7 @@ class DataManager:
     def __init__(self, target_folder='./images'):
         print ('[DataManager.__init__] created')
         DataManager.easyocr_reader = easyocr.Reader(['ch_sim','en']) # this needs to run only once to load the model into memory
-        self.reset(target_folder)
+        self.resetWorkFolder(target_folder)
     
     @classmethod
     def getBorderInfoOfText(cls, img_file, list_idx):
@@ -88,7 +88,7 @@ class DataManager:
         return None
     
     @classmethod
-    def reset(cls, target_folder='./images'):
+    def resetWorkFolder(cls, target_folder='./images'):
         print ('[DataManager.reset] reset, target=', target_folder)
         cls.target_folder = os.path.abspath(target_folder)
         cls.__loadImages(cls.target_folder)
