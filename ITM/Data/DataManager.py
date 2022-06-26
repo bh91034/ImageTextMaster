@@ -113,6 +113,8 @@ class DataManager:
         print ('[DataManager] getOutputFile() called...')
         src_file_name = Path(src_file).name
         out_file = os.path.abspath(cls.target_folder + '/' + '__OUTPUT_FILES__' + '/' + src_file_name)
+        print ('[DataManager] getOutputFile() : src_file=', src_file)
+        print ('[DataManager] getOutputFile() : out_file=', out_file)
         return out_file
     
     @classmethod
