@@ -1,8 +1,6 @@
 import glob
 import os
 
-from h11 import Data
-
 from ITM.Data.DataManager import DataManager
 from ITM.Frame.LowFrame import LowFrame
 from ITM.Frame.MiddleFrame import MiddleFrame
