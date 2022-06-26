@@ -92,7 +92,10 @@ class DataManager:
         print ('[DataManager.reset] reset, target=', target_folder)
         cls.target_folder = os.path.abspath(target_folder)
         cls.__loadImages(cls.target_folder)
-    
+        
+        # init __OUTPUT_FILES__ folder
+        cls.__initOutputFiles()
+
     @classmethod
     def __loadImages(cls, target_folder):
         print ('[DataManager.__loadImages] load images, from ', target_folder)
@@ -100,3 +103,40 @@ class DataManager:
         [cls.target_files.extend(glob.glob(target_folder + '/' + '*.' + e)) for e in ext]
         print ('[DataManager.__loadImages] num images : ', len(cls.target_files))
         cls.target_texts = [None] * len(cls.target_files)
+
+    # -----------------> from here <-------------------------------------------
+    #ifdef __OUTPUT_FILES__
+    @classmethod
+    def getOutputFile(cls, src_file):
+        from pathlib import Path
+        import shutil
+        print ('[DataManager] getOutputFile() called...')
+        src_file_name = Path(src_file).name
+        out_file = os.path.abspath(cls.target_folder + '/' + '__OUTPUT_FILES__' + '/' + src_file_name)
+        return out_file
+    
+    @classmethod
+    def __initOutputFiles(cls):
+        print ('[DataManager] initOutputFiles() called...')
+        output_folder = os.path.abspath(cls.target_folder + '/' + '__OUTPUT_FILES__')
+        print ('[DataManager] initOutputFiles() : output_folder = ', output_folder)
+
+        # create output folder if not exist
+        if os.path.isdir(output_folder) == False:
+            os.makedirs(output_folder)
+            print ('[DataManager] initOutputFiles() : outpput_folder newly created!')
+        
+        if cls.target_files == None or len(cls.target_files) == 0:
+            print ('[DataManager] initOutputFiles() : no source files!')
+            return
+        
+        # copy files to output folder if source image file doesn't exist in output folder
+        from pathlib import Path
+        import shutil
+        for src_file in cls.target_files:
+            src_file_name = Path(src_file).name
+            out_file = os.path.abspath(cls.target_folder + '/' + '__OUTPUT_FILES__' + '/' + src_file_name)
+            if not os.path.isfile(out_file):
+                shutil.copy(src_file, out_file)
+    #endif // __OUTPUT_FILES__
+    # -----------------> to   here <-------------------------------------------
