@@ -23,10 +23,8 @@ class MiddleFrame:
         bg = ImageTk.PhotoImage(file=ControlManager.work_file)
         left_canvas = tk.Canvas(mid_frm, bg='lightgray')
         left_canvas.grid(row=0, column=0, sticky=tk.E+tk.W+tk.N+tk.S)
-        #left_canvas.create_image(0,0, image=bg, anchor="nw")
         right_canvas = tk.Canvas(mid_frm, bg='lightgray')
         right_canvas.grid(row=0, column=1, sticky=tk.E+tk.W+tk.N+tk.S)
-        #right_canvas.create_image(0,0, image=bg, anchor="nw")
         MiddleFrame.work_image = Image.open(ControlManager.work_file)
         MiddleFrame.left_canvas = left_canvas
         MiddleFrame.right_canvas = right_canvas
