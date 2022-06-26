@@ -77,6 +77,7 @@ class MiddleFrame:
             return
 
         # draw image
+        scale_ratio = 1.0
         if canvas_w >= left_image.width() and canvas_h >= left_image.height():
             left_canvas.create_image(0,0, image=left_image, anchor="nw")
             right_canvas.create_image(0,0, image=right_image, anchor="nw")
@@ -92,13 +93,25 @@ class MiddleFrame:
             bg_right = right_image_resize.resize((w, h), Image.ANTIALIAS)
             new_bg_right = ImageTk.PhotoImage(bg_right)
             right_canvas.create_image(0,0, image=new_bg_right, anchor="nw")
+            scale_ratio = w/w1
         
         # draw lines for selected text in check list of remove tab in LowFrame
         idx = 0
         from ITM.Frame.LowFrame import LowFrame
+        from ITM.Control.ControlManager import ControlManager
+        list_values = LowFrame.remove_tab_text_list.list_values
+        if list_values == None or len(list_values) == 0:
+            return
         for item in LowFrame.remove_tab_text_list.list_values:
             if item.get() == True:
-                print ('#######################> [',idx,'] should be drawn!!')
+                start_pos, end_pos = DataManager.getBorderInfoOfText(ControlManager.work_file, idx)
+                left_canvas.create_rectangle(
+                    int(scale_ratio*start_pos[0]),  # start x 
+                    int(scale_ratio*start_pos[1]),  # start y
+                    int(scale_ratio*end_pos[0]),    # end x
+                    int(scale_ratio*end_pos[1]),    # end y
+                    outline='red'
+                )
             idx = idx + 1
 
     @classmethod

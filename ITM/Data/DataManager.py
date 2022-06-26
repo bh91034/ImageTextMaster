@@ -17,6 +17,12 @@ class DataManager:
         DataManager.easyocr_reader = easyocr.Reader(['ch_sim','en']) # this needs to run only once to load the model into memory
     
     @classmethod
+    def getBorderInfoOfText(cls, curr_file, list_idx):
+        print ('[DataManager] getBorderInfoOfText() called!!...')
+        file_idx = cls.getImageIndex(curr_file)
+        return cls.target_texts[file_idx][list_idx][0][0], cls.target_texts[file_idx][list_idx][0][2]
+
+    @classmethod
     def getTextsInImage(cls, curr_file):
         print ('[DataManager] getTargetTexts() called!!...')
         i = cls.getImageIndex(curr_file)

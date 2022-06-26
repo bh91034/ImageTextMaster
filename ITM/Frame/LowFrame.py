@@ -13,6 +13,9 @@ class ScrollableListType(Enum):
     RADIO_BUTTON = auto()
 
 class ScrollableList(tk.Frame):
+    # note : the following 2 variables should be reset when image changes
+    #        - list_values
+    #        - text
     def __init__(self, root, list_type, *args, **kwargs):
         tk.Frame.__init__(self, root, *args, **kwargs)
         self.root = root
@@ -30,6 +33,7 @@ class ScrollableList(tk.Frame):
     
     def reset(self, text_list=None):
         self.text.delete('1.0', END)
+        self.list_values = []
         print ('[LowFrame.ScrollableList] reset() called!!...')
         print ('[LowFrame.ScrollableList] reset() : text_list=', text_list)
         
