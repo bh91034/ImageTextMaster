@@ -13,6 +13,7 @@ class MiddleFrame:
     src_photoimage = None
     out_photoimage = None
     src_image = None
+    out_image = None
 
     def __init__(self, root):
         from ITM.Control.ControlManager import ControlManager
@@ -25,6 +26,7 @@ class MiddleFrame:
         right_canvas = tk.Canvas(mid_frm, bg='lightgray')
         right_canvas.grid(row=0, column=1, sticky=tk.E+tk.W+tk.N+tk.S)
         MiddleFrame.src_image = Image.open(ControlManager.work_file)
+        MiddleFrame.out_image = Image.open(DataManager.getOutputFile(ControlManager.work_file))
         MiddleFrame.left_canvas = left_canvas
         MiddleFrame.right_canvas = right_canvas
         MiddleFrame.src_photoimage = ImageTk.PhotoImage(file=ControlManager.work_file)
@@ -80,7 +82,7 @@ class MiddleFrame:
             right_canvas.create_image(0,0, image=right_image, anchor="nw")
         else:
             left_image_resize = MiddleFrame.src_image
-            right_image_resize = MiddleFrame.src_image
+            right_image_resize = MiddleFrame.out_image
 
             w1, h1 = left_image_resize.size
             w, h = cls.getAdaptedImageSize(w1, h1, canvas_w, canvas_h)
@@ -121,9 +123,16 @@ class MiddleFrame:
             return int(canvas_h*h_ratio), int(canvas_h)
 
     @classmethod
-    def resetCanvasImages(cls, work_image):
-        print ('[MiddleFrame.resetCanvasImages] called...')
-        
+    def resetCanvasImages(cls, work_file):
+        from ITM.Control.ControlManager import ControlManager
+        print ('[MiddleFrame] resetCanvasImages() called...')
+
+        #
+        src_file = work_file
+        out_file = DataManager.getOutputFile(work_file)
+        print ('[MiddleFrame] resetCanvasImages() : src_file=', src_file)
+        print ('[MiddleFrame] resetCanvasImages() : out_file=', out_file)
+
         # clear canvases
         cls.left_canvas.delete("all")
         cls.right_canvas.delete("all")
@@ -131,7 +140,8 @@ class MiddleFrame:
         cls.out_photoimage = None
 
         # load new images and draw them to canvases
-        cls.src_image = Image.open(work_image)
-        cls.src_photoimage = ImageTk.PhotoImage(file=work_image)
-        cls.out_photoimage = ImageTk.PhotoImage(file=work_image)
+        cls.src_image = Image.open(src_file)
+        cls.out_image = Image.open(out_file)
+        cls.src_photoimage = ImageTk.PhotoImage(file=src_file)
+        cls.out_photoimage = ImageTk.PhotoImage(file=out_file)
         cls.resizeCanvasImages()
