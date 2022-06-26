@@ -1,6 +1,11 @@
 from ITM.Data.DataManager import DataManager
 from tkinter import messagebox as mb
 
+def selectedCheckListInRemoveTab(text):
+    print ('[LowFrameControl] selectedCheckListInRemoveTab() called!!...')
+    print ('[LowFrameControl] selectedCheckListInRemoveTab() : text=', text)
+
+
 def clickedTextSearchInRemoveTab():
     print ('[LowFrameControl] clickedTextSearchInRemoveTab() called!!...')
 

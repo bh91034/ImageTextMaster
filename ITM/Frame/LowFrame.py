@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
 from tkinter import END, scrolledtext
-from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab
+from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab, selectedCheckListInRemoveTab
 
 #------------------------------------------------------------------------------
 # Low frame : low side tabbed pane (tools)
@@ -24,21 +24,27 @@ class ScrollableList(tk.Frame):
         self.vsb.pack(side="right", fill="y")
         self.text.pack(side="left", fill="both", expand=True)
 
+    def __getIndexedText(self, idx, text):
+        return str(idx) + '|' + text
+    
     def reset(self, text_list=None):
         self.text.delete('1.0', END)
         print ('[LowFrame.ScrollableList] reset() called!!...')
         print ('[LowFrame.ScrollableList] reset() : text_list=', text_list)
         if text_list is not None:
+            idx = 0
             for t in text_list:
                 if self.list_type == ScrollableListType.CHECK_BUTTON:
-                    cb = tk.Checkbutton(self, text=t)
+                    # Reference : checkbutton example getting value in callback
+                    # - https://arstechnica.com/civis/viewtopic.php?t=69728
+                    cb = tk.Checkbutton(self, text=t, command=lambda i=self.__getIndexedText(idx,t): selectedCheckListInRemoveTab(i))
                 elif self.list_type == ScrollableListType.RADIO_BUTTON:
                     cb = tk.Radiobutton(self, text=t)
                 else:
                     cb = tk.Checkbutton(self, text=t)
                 self.text.window_create("end", window=cb)
                 self.text.insert("end", "\n") # to force one checkbox per line
-
+                idx = idx + 1
 
 class LowFrame:
     remove_tab_text_list = None
