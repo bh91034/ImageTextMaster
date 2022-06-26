@@ -28,7 +28,7 @@ class ControlManager:
         TopFrame.changeWorkFile(work_file)
 
         # set texts to remove tab in 'LowFrame'
-        texts = DataManager.getTextsInImage(work_file)
+        texts = DataManager.getExistingTextsInImage(work_file)
         LowFrame.resetRemoveTabData(texts)
 
     @classmethod

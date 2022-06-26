@@ -3,18 +3,18 @@ import easyocr
 
 ext = ['png', 'jpg', 'gif']    # Add image formats here
 class DataManager:
-    images = None
+    # need to reset, reload
     target_folder = None
     target_files = []
     target_texts = []
+
+    # no need to reset, reload
     easyocr_reader = None
 
     def __init__(self, target_folder='./images'):
         print ('[DataManager.__init__] created')
-        self.target_folder = target_folder
-        self.reset(target_folder)
-        DataManager.target_folder = target_folder
         DataManager.easyocr_reader = easyocr.Reader(['ch_sim','en']) # this needs to run only once to load the model into memory
+        self.reset(target_folder)
     
     @classmethod
     def getBorderInfoOfText(cls, curr_file, list_idx):
@@ -23,7 +23,7 @@ class DataManager:
         return cls.target_texts[file_idx][list_idx][0][0], cls.target_texts[file_idx][list_idx][0][2]
 
     @classmethod
-    def getTextsInImage(cls, curr_file):
+    def getExistingTextsInImage(cls, curr_file):
         print ('[DataManager] getTargetTexts() called!!...')
         i = cls.getImageIndex(curr_file)
         if cls.target_texts[i] != None:
