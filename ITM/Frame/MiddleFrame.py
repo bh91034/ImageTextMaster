@@ -76,6 +76,7 @@ class MiddleFrame:
         if left_image == None:
             return
 
+        # draw image
         if canvas_w >= left_image.width() and canvas_h >= left_image.height():
             left_canvas.create_image(0,0, image=left_image, anchor="nw")
             right_canvas.create_image(0,0, image=right_image, anchor="nw")
@@ -92,6 +93,14 @@ class MiddleFrame:
             new_bg_right = ImageTk.PhotoImage(bg_right)
             right_canvas.create_image(0,0, image=new_bg_right, anchor="nw")
         
+        # draw lines for selected text in check list of remove tab in LowFrame
+        idx = 0
+        from ITM.Frame.LowFrame import LowFrame
+        for item in LowFrame.remove_tab_text_list.list_values:
+            if item.get() == True:
+                print ('#######################> [',idx,'] should be drawn!!')
+            idx = idx + 1
+
     @classmethod
     def getAdaptedImageSize(cls, img_w, img_h, canvas_w, canvas_h):
         w_ratio = img_h/img_w

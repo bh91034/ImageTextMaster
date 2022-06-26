@@ -1,10 +1,21 @@
-from ITM.Data.DataManager import DataManager
 from tkinter import messagebox as mb
 
-def selectedCheckListInRemoveTab(text):
-    print ('[LowFrameControl] selectedCheckListInRemoveTab() called!!...')
-    print ('[LowFrameControl] selectedCheckListInRemoveTab() : text=', text)
+from ITM.Frame.MiddleFrame import MiddleFrame
 
+def selectedCheckListInRemoveTab(text):
+    from ITM.Frame.LowFrame import LowFrame
+    print ('[LowFrameControl] selectedCheckListInRemoveTab() called!!...')
+    text_info = text.split('|', 1)
+
+    # get selected item's info (id, text, status)
+    selected_item_id = int(text_info[0])
+    selected_item_text = text_info[1]
+    selected_item_status = LowFrame.getStatusOfCheckListInRemoveTab(selected_item_id)
+    print ('[LowFrameControl] selectedCheckListInRemoveTab() : id = ', selected_item_id)
+    print ('[LowFrameControl] selectedCheckListInRemoveTab() : text = ', selected_item_text)
+    print ('[LowFrameControl] selectedCheckListInRemoveTab() : status = ', selected_item_status.get())
+    from ITM.Control.ControlManager import ControlManager
+    MiddleFrame.resetCanvasImages(ControlManager.work_file)
 
 def clickedTextSearchInRemoveTab():
     print ('[LowFrameControl] clickedTextSearchInRemoveTab() called!!...')
@@ -16,6 +27,7 @@ def clickedTextSearchInRemoveTab():
         return
     
     # check if text search has been done already
+    from ITM.Data.DataManager import DataManager
     i = DataManager.getImageIndex(ControlManager.work_file)
 
     # read texts in image

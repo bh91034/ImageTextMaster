@@ -23,6 +23,7 @@ class ScrollableList(tk.Frame):
         self.vsb.config(command=self.text.yview)
         self.vsb.pack(side="right", fill="y")
         self.text.pack(side="left", fill="both", expand=True)
+        self.list_values = []
 
     def __getIndexedText(self, idx, text):
         return str(idx) + '|' + text
@@ -31,13 +32,18 @@ class ScrollableList(tk.Frame):
         self.text.delete('1.0', END)
         print ('[LowFrame.ScrollableList] reset() called!!...')
         print ('[LowFrame.ScrollableList] reset() : text_list=', text_list)
+        
         if text_list is not None:
             idx = 0
+            self.list_values = [None] * len(text_list)
+            for i in range(len(text_list)):
+                self.list_values[i] = tk.BooleanVar()
+            
             for t in text_list:
                 if self.list_type == ScrollableListType.CHECK_BUTTON:
                     # Reference : checkbutton example getting value in callback
                     # - https://arstechnica.com/civis/viewtopic.php?t=69728
-                    cb = tk.Checkbutton(self, text=t, command=lambda i=self.__getIndexedText(idx,t): selectedCheckListInRemoveTab(i))
+                    cb = tk.Checkbutton(self, text=t, command=lambda i=self.__getIndexedText(idx,t): selectedCheckListInRemoveTab(i), var=self.list_values[idx])
                 elif self.list_type == ScrollableListType.RADIO_BUTTON:
                     cb = tk.Radiobutton(self, text=t)
                 else:
@@ -162,6 +168,11 @@ class LowFrame:
         LowFrame.write_tab_text_google = write_tab_text_google
         LowFrame.write_tab_text_final = write_tab_text_final
 
+    @classmethod
+    def getStatusOfCheckListInRemoveTab(cls, idx):
+        print ('[LowFrame] getStatusOfCheckListInRemoveTab() called...')
+        return cls.remove_tab_text_list.list_values[idx]
+    
     @classmethod
     def resetRemoveTabData(cls, texts=None):
         print ('[LowFrame] resetRemoveTabData() called...')
