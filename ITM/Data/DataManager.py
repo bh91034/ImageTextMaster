@@ -17,34 +17,34 @@ class DataManager:
         self.reset(target_folder)
     
     @classmethod
-    def getBorderInfoOfText(cls, curr_file, list_idx):
+    def getBorderInfoOfText(cls, img_file, list_idx):
         print ('[DataManager] getBorderInfoOfText() called!!...')
-        file_idx = cls.getImageIndex(curr_file)
+        file_idx = cls.getImageIndex(img_file)
         return cls.target_texts[file_idx][list_idx][0][0], cls.target_texts[file_idx][list_idx][0][2]
 
     @classmethod
-    def getExistingTextsInImage(cls, curr_file):
-        print ('[DataManager] getTargetTexts() called!!...')
-        i = cls.getImageIndex(curr_file)
+    def getExistingTextsInImage(cls, img_file):
+        print ('[DataManager] getExistingTextsInImage() called!!...')
+        i = cls.getImageIndex(img_file)
         if cls.target_texts[i] != None:
             texts = [t[1] for t in cls.target_texts[i]]
             return texts
         return None
     
     @classmethod
-    def readTextsInImage(cls, curr_file):
-        print ('[DataManager] readTextsInImage() called!!...')
-        texts_info = cls.easyocr_reader.readtext(curr_file)
+    def readTextsInImageAgain(cls, img_file):
+        print ('[DataManager] readTextsInImageAgain() called!!...')
+        texts_info = cls.easyocr_reader.readtext(img_file)
         if texts_info == None:
             return None
-        cls.setTargetTexts(curr_file, texts_info)
+        cls.__setTargetTexts(img_file, texts_info)
         texts = [t[1] for t in texts_info]
         return texts
 
     @classmethod
-    def setTargetTexts(cls, curr_file, texts_info):
+    def __setTargetTexts(cls, img_file, texts_info):
         print ('[DataManager] setTargetTexts() called!!...')
-        i = cls.getImageIndex(curr_file)
+        i = cls.getImageIndex(img_file)
         if i < 0:
             return False
         else:
@@ -52,19 +52,19 @@ class DataManager:
             cls.target_texts[i] = texts_info
 
     @classmethod
-    def getImageIndex(cls, curr_file):
+    def getImageIndex(cls, img_file):
         print ('[DataManager] getImageIndex() called!!...')
         for i in range(len(cls.target_files)):
-            if cls.target_files[i] == curr_file:
+            if cls.target_files[i] == img_file:
                 return i
         return -1
 
     @classmethod
-    def getNextImageFile(cls, curr_file):
+    def getNextImageFile(cls, img_file):
         print ('[DataManager] getNextImageFile() called!!...')
         for i in range(len(cls.target_files)):
-            print ('[DataManager] getNextImageFile() i=', i, ', curr_file=', curr_file, ', compare=',cls.target_files[i])
-            if cls.target_files[i] == curr_file:
+            print ('[DataManager] getNextImageFile() i=', i, ', curr_file=', img_file, ', compare=',cls.target_files[i])
+            if cls.target_files[i] == img_file:
                 if (i+1) < len(cls.target_files):
                     print ('[DataManager] getNextImageFile() - image found : ', cls.target_files[i+1])
                     return cls.target_files[i+1]
@@ -74,11 +74,11 @@ class DataManager:
         return None
     
     @classmethod
-    def getPrevImageFile(cls, curr_file):
+    def getPrevImageFile(cls, img_file):
         print ('[DataManager] getPrevImageFile() called!!...')
         for i in range(len(cls.target_files)):
-            print ('[DataManager] getPrevImageFile() i=', i, ', curr_file=', curr_file, ', compare=',cls.target_files[i])
-            if cls.target_files[i] == curr_file:
+            print ('[DataManager] getPrevImageFile() i=', i, ', curr_file=', img_file, ', compare=',cls.target_files[i])
+            if cls.target_files[i] == img_file:
                 if i != 0:
                     print ('[DataManager] getPrevImageFile() - image found : ', cls.target_files[i-1])
                     return cls.target_files[i-1]

@@ -34,7 +34,7 @@ def clickedTextSearchInRemoveTab():
         return
 
     # read texts in image
-    texts = DataManager.readTextsInImage(ControlManager.work_file)
+    texts = DataManager.readTextsInImageAgain(ControlManager.work_file)
     if texts == None:
         return
 
