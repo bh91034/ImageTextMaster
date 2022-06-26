@@ -4,6 +4,6 @@ from ITM.Control.ControlManager import ControlManager
 
 #
 data = DataManager()
-control = ControlManager(data)
-root = FrameManager.init(control)
+control = ControlManager()
+root = FrameManager.init()
 root.mainloop()

@@ -8,7 +8,7 @@ from ITM.Frame.TopFrame import TopFrame
 
 class ControlManager:
     work_file = None
-    def __init__(self, data_manager):
+    def __init__(self):
         ControlManager.work_file = DataManager.target_files[0]
 
     @classmethod

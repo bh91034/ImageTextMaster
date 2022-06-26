@@ -1,10 +1,8 @@
 import tkinter as tk
 
 class FrameManager:
-    global control_manager
     @staticmethod
-    def init(control_manager):
-        control_manager = control_manager
+    def init():
         # root window
         root = tk.Tk()
         root.geometry('1200x600+20+20')
