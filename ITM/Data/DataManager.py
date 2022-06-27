@@ -119,6 +119,8 @@ class DataManager:
         
         if out_file is not None:
             out_image.save(out_file)
+            return True
+        return False
 
     @classmethod
     def getOutputFile(cls, src_file):
