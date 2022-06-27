@@ -83,12 +83,13 @@ class LowFrame:
         #------------------------------------------------------------------------------
         # Low frame - remove tab : low frame remove tab controls
         #------------------------------------------------------------------------------
+        from ITM.Frame.MiddleFrame import MiddleFrame
+        
         remove_tab_up_frm = ttk.Frame(low_frm_remove_tab)
         remove_tab_up_frm.pack(padx=2, pady=2, fill='both', side='top')
         
-        #from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab
         remove_tab_btn_search_img = ttk.Button(remove_tab_up_frm, text='텍스트 찾기', command=clickedTextSearchInRemoveTab)
-        remove_tab_btn_remove_img = ttk.Button(remove_tab_up_frm, text='선택 지우기')
+        remove_tab_btn_remove_img = ttk.Button(remove_tab_up_frm, text='선택 지우기', command=MiddleFrame.removeSelectedTexts)
         remove_tab_btn_revoke_img = ttk.Button(remove_tab_up_frm, text='원상태 복원')
 
         remove_tab_btn_search_img.pack(side='left')

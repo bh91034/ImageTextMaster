@@ -1,13 +1,14 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
+#from matplotlib.pyplot import text
 from ITM.Data.DataManager import DataManager
 
 #------------------------------------------------------------------------------
 # Middle frame : middle side canvases
 #------------------------------------------------------------------------------
 class MiddleFrame:
-    global mid_frm
+    mid_frm = None
     left_canvas = None
     right_canvas = None
     src_photoimage = None
@@ -19,6 +20,7 @@ class MiddleFrame:
         from ITM.Control.ControlManager import ControlManager
         # middle canvases frame
         mid_frm = tk.Frame(root)
+        MiddleFrame.mid_frm = mid_frm
         mid_frm.pack(padx=2, pady=2, fill='both', expand=True)
 
         left_canvas = tk.Canvas(mid_frm, bg='lightgray')
@@ -64,8 +66,8 @@ class MiddleFrame:
         # variables
         left_canvas = cls.left_canvas
         right_canvas = cls.right_canvas
-        left_image = cls.src_photoimage
-        right_image = cls.out_photoimage
+        left_photoimage = cls.src_photoimage
+        right_photoimage = cls.out_photoimage
         bg_left = cls.bg_left
         new_bg_left = cls.new_bg_left
         bg_right = cls.bg_right
@@ -76,14 +78,14 @@ class MiddleFrame:
         right_canvas.delete("all")
 
         # check if a image to be drawn exists
-        if left_image == None:
+        if left_photoimage == None:
             return
 
         # draw image
         scale_ratio = 1.0
-        if canvas_w >= left_image.width() and canvas_h >= left_image.height():
-            left_canvas.create_image(0,0, image=left_image, anchor="nw")
-            right_canvas.create_image(0,0, image=right_image, anchor="nw")
+        if canvas_w >= left_photoimage.width() and canvas_h >= left_photoimage.height():
+            left_canvas.create_image(0,0, image=left_photoimage, anchor="nw")
+            right_canvas.create_image(0,0, image=right_photoimage, anchor="nw")
         else:
             left_image_resize = MiddleFrame.src_image
             right_image_resize = MiddleFrame.out_image
@@ -149,3 +151,67 @@ class MiddleFrame:
         cls.src_photoimage = ImageTk.PhotoImage(file=src_file)
         cls.out_photoimage = ImageTk.PhotoImage(file=out_file)
         cls.resizeCanvasImages()
+
+    @classmethod
+    def removeSelectedTexts(cls):
+        from ITM.Control.ControlManager import ControlManager
+        print ('[MiddleFrame] removeSelectedTexts() called...')
+
+        texts = DataManager.target_texts[DataManager.getImageIndex(ControlManager.work_file)]
+        if texts == None:
+            print ('[MiddleFrame] removeSelectedTexts() : no texts were selected!')
+            return None
+        
+        # Reference : Image conversion from cv2 to PhotoImage (PIL)
+        # - https://m.blog.naver.com/heennavi1004/222028305376
+        import cv2
+        img_cv2 = cls.__inpaintForSelectedTexts(ControlManager.work_file, texts)
+        if img_cv2 is None:
+            print ('[MiddleFrame] removeSelectedTexts() : no need to redraw image!')
+            return
+        
+        img_conv = Image.fromarray(img_cv2)
+
+        # reset (redraw) output canvas with image which selected texts were removed in
+        cls.out_image = img_conv
+        cls.out_photoimage = ImageTk.PhotoImage(img_conv)
+        cls.resizeCanvasImages()
+
+    @classmethod
+    def __inpaintForSelectedTexts(cls, img_path, texts):
+        import math
+        import numpy as np
+        import cv2
+        import easyocr
+        from ITM.Frame.LowFrame import LowFrame
+
+        print ('[MiddleFrame] __inpaint_text() called...')
+        
+        # generate (word, box) tuples 
+        img = cv2.cvtColor(cv2.imread(img_path), cv2.COLOR_BGR2RGB)
+        mask = np.zeros(img.shape[:2], dtype="uint8")
+
+        img_return = None
+        idx = 0
+        for t in texts:
+            list_status = LowFrame.remove_tab_text_list.list_values
+            if list_status[idx].get() == True:
+                x0, y0 = t[0][0]
+                x1, y1 = t[0][1] 
+                x2, y2 = t[0][2]
+                x3, y3 = t[0][3] 
+
+                x_mid0, y_mid0 = cls.__midpoint(x1, y1, x2, y2)
+                x_mid1, y_mi1 = cls.__midpoint(x0, y0, x3, y3)
+                thickness = int(math.sqrt( (x2 - x1)**2 + (y2 - y1)**2 ))
+                
+                cv2.line(mask, (x_mid0, y_mid0), (x_mid1, y_mi1), 255, thickness)
+                img_return = cv2.inpaint(img, mask, 7, cv2.INPAINT_NS)
+            idx = idx+1
+        return img_return
+
+    @classmethod
+    def __midpoint(cls, x1, y1, x2, y2):
+        x_mid = int((x1 + x2)/2)
+        y_mid = int((y1 + y2)/2)
+        return (x_mid, y_mid)
