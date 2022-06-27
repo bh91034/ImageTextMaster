@@ -3,6 +3,7 @@ import tkinter
 from tkinter import messagebox as mb
 from tkinter import filedialog
 from ITM.Data.DataManager import DataManager
+from ITM.Frame.MiddleFrame import MiddleFrame
 
 def __checkWorkFolder(work_dir):
     # check if image exists
@@ -14,6 +15,11 @@ def __checkWorkFolder(work_dir):
         return False
     else:
         return True
+
+def clickedSaveOutput():
+    print ('[TopFrameControl] clickedSaveOutput() called!!...')
+    from ITM.Control.ControlManager import ControlManager
+    DataManager.saveOutputFile(ControlManager.work_file, MiddleFrame.out_image)
 
 def clickedPrevImage():
     print ('[TopFrameControl] clickedPrevImage() called!!...')

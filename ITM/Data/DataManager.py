@@ -107,6 +107,20 @@ class DataManager:
     # -----------------> from here <-------------------------------------------
     #ifdef __OUTPUT_FILES__
     @classmethod
+    def saveOutputFile(cls, src_file, out_image):
+        print ('[DataManager] saveOutputFile() called...')
+        
+        if out_image is None:
+            print ('[DataManager] saveOutputFile() : image is None, it can not be saved!')
+        
+        out_file = cls.getOutputFile(src_file)
+        print ('[DataManager] saveOutputFile() : src_file=', src_file)
+        print ('[DataManager] saveOutputFile() : out_file=', out_file)
+        
+        if out_file is not None:
+            out_image.save(out_file)
+
+    @classmethod
     def getOutputFile(cls, src_file):
         from pathlib import Path
         import shutil
@@ -116,7 +130,7 @@ class DataManager:
         print ('[DataManager] getOutputFile() : src_file=', src_file)
         print ('[DataManager] getOutputFile() : out_file=', out_file)
         return out_file
-    
+
     @classmethod
     def __initOutputFiles(cls):
         print ('[DataManager] initOutputFiles() called...')
