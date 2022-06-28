@@ -1,3 +1,4 @@
+from msilib.schema import Control
 import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
@@ -46,17 +47,9 @@ class LowFrame:
         self.__initWriteTab(low_frm_write_tab)
 
     def __tabChanged(self, event):
-        #selected_tab = event.widget.select()
-        #self.low_frm.select()
-        #self.low_frm.index(self.low_frm.select())
         from ITM.Control.ControlManager import ControlManager
         print ('[LowFrame] __tabChanged() called...')
-
-        # reset remove tab
-        LowFrame.resetRemoveTabData(DataManager.getExistingTextsInImage(ControlManager.work_file))
-
-        # reset write tab
-        LowFrame.resetWriteTabData()
+        MiddleFrame.resetCanvasImages(ControlManager.work_file)
     
     #------------------------------------------------------------------------------
     # Low frame - write tab : low frame write tab controls
