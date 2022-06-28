@@ -3,17 +3,79 @@ from tkinter import ttk
 from PIL import ImageTk, Image
 from ITM.Data.DataManager import DataManager
 
+class CanvasWorkier:
+    def __init__(self, img_file, canvas):
+        self.img_file = img_file
+        self.canvas = canvas
+        self.image = Image.open(img_file)
+        self.photoimage = None
+    
+    def drawImage(self):
+        self.photoimage = ImageTk.PhotoImage(file=self.img_file)
+        
+        canvas_w = self.canvas.winfo_width()
+        canvas_h = self.canvas.winfo_height()
+
+        self.scale_ratio = 1.0
+        if canvas_w >= self.photoimage.width() and canvas_h >= self.photoimage.height():
+            self.canvas.create_image(0,0, image=self.photoimage, anchor="nw")
+        else:
+            w1, h1 = self.image.size
+            w, h = CanvasWorkier.getAdaptedImageSize(w1, h1, canvas_w, canvas_h)
+            image_resized = self.image.resize((w, h), Image.ANTIALIAS)
+            self.photoimage = ImageTk.PhotoImage(image_resized)
+            self.canvas.create_image(0,0, image=self.photoimage, anchor="nw")
+            self.scale_ratio = w/w1
+        
+        from ITM.Frame.LowFrame import LowFrame
+        from ITM.Control.ControlManager import ControlManager
+        tab_idx = LowFrame.notebook.index(LowFrame.notebook.select())
+        if tab_idx == 0:
+            # draw lines for selected text in check list of remove tab in LowFrame
+            idx = 0
+            list_values = LowFrame.remove_tab_text_list.list_values
+            if list_values == None or len(list_values) == 0:
+                return
+            for item in LowFrame.remove_tab_text_list.list_values:
+                if item.get() == True:
+                    start_pos, end_pos = DataManager.getBorderInfoOfText(ControlManager.work_file, idx)
+                    self.canvas.create_rectangle(
+                        int(self.scale_ratio*start_pos[0]),  # start x 
+                        int(self.scale_ratio*start_pos[1]),  # start y
+                        int(self.scale_ratio*end_pos[0]),    # end x
+                        int(self.scale_ratio*end_pos[1]),    # end y
+                        #outline='green'
+                        outline='#00ff00'
+                    )
+                idx = idx + 1
+    
+    def changeImageFile(self, img_file):
+        self.img_file = img_file
+        self.image = Image.open(img_file)
+
+    def setImage(self, image):
+        if image is not None:
+            self.image = image
+    
+    def getImage(self):
+        return self.image
+    
+    @classmethod
+    def getAdaptedImageSize(cls, img_w, img_h, canvas_w, canvas_h):
+        w_ratio = img_h/img_w
+        h_ratio = img_w/img_h
+        if canvas_w*w_ratio <= canvas_h:
+            return int(canvas_w), int(canvas_w*w_ratio)
+        else:
+            return int(canvas_h*h_ratio), int(canvas_h)
+    
 #------------------------------------------------------------------------------
 # Middle frame : middle side canvases
 #------------------------------------------------------------------------------
 class MiddleFrame:
     mid_frm = None
-    left_canvas = None
-    right_canvas = None
-    src_photoimage = None
-    out_photoimage = None
-    src_image = None
-    out_image = None
+    src_canvas_worker = None
+    out_canvas_worker = None
 
     def __init__(self, root):
         from ITM.Control.ControlManager import ControlManager
@@ -30,13 +92,6 @@ class MiddleFrame:
         src_file = ControlManager.work_file
         out_file = DataManager.getOutputFile(ControlManager.work_file)
 
-        MiddleFrame.src_image = Image.open(src_file)
-        MiddleFrame.out_image = Image.open(out_file)
-        MiddleFrame.left_canvas = left_canvas
-        MiddleFrame.right_canvas = right_canvas
-        MiddleFrame.src_photoimage = ImageTk.PhotoImage(file=src_file)
-        MiddleFrame.out_photoimage = ImageTk.PhotoImage(file=out_file)
-
         # Reference :
         # - https://www.youtube.com/watch?v=xiGQD2J47nA
         # - https://github.com/flatplanet/Intro-To-TKinter-Youtube-Course/blob/master/image_bg_resize.py
@@ -50,6 +105,9 @@ class MiddleFrame:
         mid_frm.columnconfigure((0,1), weight=1)
         mid_frm.rowconfigure(0, weight=1)
 
+        MiddleFrame.src_canvas_worker = CanvasWorkier(src_file, left_canvas)
+        MiddleFrame.out_canvas_worker = CanvasWorkier(out_file, right_canvas)
+
     # TODO: why those variables could not be inside the method? (canvas doesn't display)
     bg_left = None
     new_bg_left = None
@@ -59,64 +117,8 @@ class MiddleFrame:
     def redrawCanvasImages(cls):
         global bg_left, new_bg_left, bg_right, new_bg_right
         print ('[MiddleFrame.resizeCanvasImages] called...')
-        canvas_w = cls.left_canvas.winfo_width()
-        canvas_h = cls.left_canvas.winfo_height()
-
-        # variables
-        left_canvas = cls.left_canvas
-        right_canvas = cls.right_canvas
-        left_photoimage = cls.src_photoimage
-        right_photoimage = cls.out_photoimage
-        bg_left = cls.bg_left
-        new_bg_left = cls.new_bg_left
-        bg_right = cls.bg_right
-        new_bg_right = cls.new_bg_right
-
-        # clear canvases
-        left_canvas.delete("all")
-        right_canvas.delete("all")
-
-        # check if a image to be drawn exists
-        if left_photoimage == None:
-            return
-
-        # draw image
-        scale_ratio = 1.0
-        if canvas_w >= left_photoimage.width() and canvas_h >= left_photoimage.height():
-            left_canvas.create_image(0,0, image=left_photoimage, anchor="nw")
-            right_canvas.create_image(0,0, image=right_photoimage, anchor="nw")
-        else:
-            left_image_resize = MiddleFrame.src_image
-            right_image_resize = MiddleFrame.out_image
-
-            w1, h1 = left_image_resize.size
-            w, h = cls.getAdaptedImageSize(w1, h1, canvas_w, canvas_h)
-            bg_left = left_image_resize.resize((w, h), Image.ANTIALIAS)
-            new_bg_left = ImageTk.PhotoImage(bg_left)
-            left_canvas.create_image(0,0, image=new_bg_left, anchor="nw")
-            bg_right = right_image_resize.resize((w, h), Image.ANTIALIAS)
-            new_bg_right = ImageTk.PhotoImage(bg_right)
-            right_canvas.create_image(0,0, image=new_bg_right, anchor="nw")
-            scale_ratio = w/w1
-        
-        # draw lines for selected text in check list of remove tab in LowFrame
-        idx = 0
-        from ITM.Frame.LowFrame import LowFrame
-        from ITM.Control.ControlManager import ControlManager
-        list_values = LowFrame.remove_tab_text_list.list_values
-        if list_values == None or len(list_values) == 0:
-            return
-        for item in LowFrame.remove_tab_text_list.list_values:
-            if item.get() == True:
-                start_pos, end_pos = DataManager.getBorderInfoOfText(ControlManager.work_file, idx)
-                left_canvas.create_rectangle(
-                    int(scale_ratio*start_pos[0]),  # start x 
-                    int(scale_ratio*start_pos[1]),  # start y
-                    int(scale_ratio*end_pos[0]),    # end x
-                    int(scale_ratio*end_pos[1]),    # end y
-                    outline='red'
-                )
-            idx = idx + 1
+        cls.src_canvas_worker.drawImage()
+        cls.out_canvas_worker.drawImage()
 
     @classmethod
     def getAdaptedImageSize(cls, img_w, img_h, canvas_w, canvas_h):
@@ -132,24 +134,14 @@ class MiddleFrame:
         from ITM.Control.ControlManager import ControlManager
         print ('[MiddleFrame] resetCanvasImages() called...')
 
-        #
         src_file = work_file
         out_file = DataManager.getOutputFile(work_file)
-        print ('[MiddleFrame] resetCanvasImages() : src_file=', src_file)
-        print ('[MiddleFrame] resetCanvasImages() : out_file=', out_file)
 
-        # clear canvases
-        cls.left_canvas.delete("all")
-        cls.right_canvas.delete("all")
-        cls.src_photoimage = None
-        cls.out_photoimage = None
+        cls.src_canvas_worker.changeImageFile(src_file)
+        cls.out_canvas_worker.changeImageFile(out_file)
 
-        # load new images and draw them to canvases
-        cls.src_image = Image.open(src_file)
-        cls.out_image = Image.open(out_file)
-        cls.src_photoimage = ImageTk.PhotoImage(file=src_file)
-        cls.out_photoimage = ImageTk.PhotoImage(file=out_file)
-        cls.redrawCanvasImages()
+        cls.src_canvas_worker.drawImage()
+        cls.out_canvas_worker.drawImage()
 
     @classmethod
     def removeSelectedTexts(cls):
@@ -173,8 +165,7 @@ class MiddleFrame:
         img_conv = Image.fromarray(img_cv2)
 
         # reset (redraw) output canvas with image which selected texts were removed in
-        cls.out_image = img_conv
-        cls.out_photoimage = ImageTk.PhotoImage(img_conv)
+        cls.out_canvas_worker.setImage(img_conv)
         cls.redrawCanvasImages()
 
     @classmethod

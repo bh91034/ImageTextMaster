@@ -15,10 +15,11 @@ class LowFrame:
     write_tab_text_org = None
     write_tab_text_google = None
     write_tab_text_final = None
-    global low_frm
+    notebook = None
     def __init__(self, root):
         # create a notebook
         low_frm = ttk.Notebook(root)
+        LowFrame.notebook = low_frm
         low_frm.bind("<<NotebookTabChanged>>", self.__tabChanged)
         
         low_frm.pack(pady=10, fill='both')
