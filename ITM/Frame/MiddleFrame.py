@@ -42,7 +42,7 @@ class MiddleFrame:
         # - https://github.com/flatplanet/Intro-To-TKinter-Youtube-Course/blob/master/image_bg_resize.py
         # - https://github.com/flatplanet/Intro-To-TKinter-Youtube-Course/
         def resizer(e):
-            MiddleFrame.resizeCanvasImages()
+            MiddleFrame.redrawCanvasImages()
  
         left_canvas.bind('<Configure>', resizer)
         # Added by Q&A from stackoverflow
@@ -56,7 +56,7 @@ class MiddleFrame:
     bg_right = None
     new_bg_right = None
     @classmethod
-    def resizeCanvasImages(cls):
+    def redrawCanvasImages(cls):
         global bg_left, new_bg_left, bg_right, new_bg_right
         print ('[MiddleFrame.resizeCanvasImages] called...')
         canvas_w = cls.left_canvas.winfo_width()
@@ -149,7 +149,7 @@ class MiddleFrame:
         cls.out_image = Image.open(out_file)
         cls.src_photoimage = ImageTk.PhotoImage(file=src_file)
         cls.out_photoimage = ImageTk.PhotoImage(file=out_file)
-        cls.resizeCanvasImages()
+        cls.redrawCanvasImages()
 
     @classmethod
     def removeSelectedTexts(cls):
@@ -175,7 +175,7 @@ class MiddleFrame:
         # reset (redraw) output canvas with image which selected texts were removed in
         cls.out_image = img_conv
         cls.out_photoimage = ImageTk.PhotoImage(img_conv)
-        cls.resizeCanvasImages()
+        cls.redrawCanvasImages()
 
     @classmethod
     def __inpaintForSelectedTexts(cls, img_path, texts):
