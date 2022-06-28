@@ -60,7 +60,6 @@ def clickedChangeFolder():
     from ITM.Frame.TopFrame import TopFrame
     dir_path = filedialog.askdirectory(parent=TopFrame.root, title='작업할 폴더를 선택하세요', initialdir=DataManager.target_folder)
     print("##> dir_path : ", dir_path)
-    print("##> TopFrame.root : ", TopFrame.root)
     from ITM.Control.ControlManager import ControlManager
     if __checkWorkFolder(dir_path):
             ControlManager.changedWorkFolder(dir_path)
