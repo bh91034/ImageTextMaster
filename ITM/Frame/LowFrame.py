@@ -3,6 +3,8 @@ from tkinter import ttk
 from PIL import ImageTk, Image
 from tkinter import END, scrolledtext
 from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab, selectedCheckListInRemoveTab
+from ITM.Data.DataManager import DataManager
+from ITM.Frame.MiddleFrame import MiddleFrame
 
 #------------------------------------------------------------------------------
 # Low frame : low side tabbed pane (tools)
@@ -17,12 +19,17 @@ class LowFrame:
     def __init__(self, root):
         # create a notebook
         low_frm = ttk.Notebook(root)
+        low_frm.bind("<<NotebookTabChanged>>", self.__tabChanged)
+        
         low_frm.pack(pady=10, fill='both')
         low_frm.config(height=220)
+        self.low_frm = low_frm
 
         # create frames
         low_frm_remove_tab = ttk.Frame(low_frm, height=50)
         low_frm_write_tab = ttk.Frame(low_frm, height=50)
+        low_frm_remove_tab = low_frm_remove_tab
+        low_frm_write_tab = low_frm_write_tab
 
         low_frm_remove_tab.pack(fill='both', expand=True)
         low_frm_write_tab.pack(fill='both', expand=True)
@@ -37,6 +44,19 @@ class LowFrame:
         # init write tab
         self.__initWriteTab(low_frm_write_tab)
 
+    def __tabChanged(self, event):
+        #selected_tab = event.widget.select()
+        #self.low_frm.select()
+        #self.low_frm.index(self.low_frm.select())
+        from ITM.Control.ControlManager import ControlManager
+        print ('[LowFrame] __tabChanged() called...')
+
+        # reset remove tab
+        LowFrame.resetRemoveTabData(DataManager.getExistingTextsInImage(ControlManager.work_file))
+
+        # reset write tab
+        LowFrame.resetWriteTabData()
+    
     #------------------------------------------------------------------------------
     # Low frame - write tab : low frame write tab controls
     #------------------------------------------------------------------------------
