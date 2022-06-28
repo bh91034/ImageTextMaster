@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
-#from matplotlib.pyplot import text
 from ITM.Data.DataManager import DataManager
 
 #------------------------------------------------------------------------------
@@ -165,7 +164,8 @@ class MiddleFrame:
         # Reference : Image conversion from cv2 to PhotoImage (PIL)
         # - https://m.blog.naver.com/heennavi1004/222028305376
         import cv2
-        img_cv2 = cls.__inpaintForSelectedTexts(ControlManager.work_file, texts)
+        out_file = DataManager.getOutputFile(ControlManager.work_file)
+        img_cv2 = cls.__inpaintForSelectedTexts(out_file, texts)
         if img_cv2 is None:
             print ('[MiddleFrame] removeSelectedTexts() : no need to redraw image!')
             return
