@@ -15,6 +15,9 @@ class CanvasWorkier:
         
         canvas_w = self.canvas.winfo_width()
         canvas_h = self.canvas.winfo_height()
+        # sometimes at the very first draw, the canvas size was (1,1) and it makes error
+        if canvas_w <= 1 or canvas_h <= 1:
+            return
 
         self.scale_ratio = 1.0
         if canvas_w >= self.photoimage.width() and canvas_h >= self.photoimage.height():
