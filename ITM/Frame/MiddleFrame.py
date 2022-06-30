@@ -19,6 +19,8 @@ class CanvasWorkier:
         if canvas_w <= 1 or canvas_h <= 1:
             return
 
+        self.canvas.cnvs.delete("all")
+
         self.scale_ratio = 1.0
         self.canvas.cnvs.create_image(0,0, image=self.photoimage, anchor="nw")
         # Reference : 
