@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from ITM.Control.TopFrameControl import clickedChangeFolder, clickedNextImage, clickedPrevImage, clickedSaveOutput
+from ITM.Control.TopFrameControl import clickedChangeFolder, clickedNextImage, clickedPrevImage
 from ITM.Data.DataManager import DataManager
 
 #------------------------------------------------------------------------------
@@ -26,15 +26,11 @@ class TopFrame:
 
         TopFrame.label_curr_file_name = label_curr_file_name
 
-        # top buttons : '결과 저장'
-        btn_save_img = ttk.Button(top_frm, text='결과 저장', command=clickedSaveOutput)
-
         btn_prv_img.pack(side='left')
         btn_nxt_img.pack(side='left')
         btn_change_folder.pack(side='left')
         label_curr_file_title.pack(side='left')
         label_curr_file_name.pack(side='left')
-        btn_save_img.pack(side='right')
 
         TopFrame.root = top_frm
     

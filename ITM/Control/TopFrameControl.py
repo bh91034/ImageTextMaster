@@ -16,15 +16,6 @@ def __checkWorkFolder(work_dir):
     else:
         return True
 
-def clickedSaveOutput():
-    print ('[TopFrameControl] clickedSaveOutput() called!!...')
-    from ITM.Control.ControlManager import ControlManager
-    result = DataManager.saveOutputFile(ControlManager.work_file, MiddleFrame.out_canvas_worker.getImage())
-    if result == True:
-        mb.showinfo("성공", "저장되었습니다")
-    else:
-        mb.showerror("에러", "저장에 실패했습니다")
-
 def clickedPrevImage():
     print ('[TopFrameControl] clickedPrevImage() called!!...')
     from ITM.Control.ControlManager import ControlManager
