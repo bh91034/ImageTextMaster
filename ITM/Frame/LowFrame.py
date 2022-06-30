@@ -1,6 +1,6 @@
 from msilib.schema import Control
 import tkinter as tk
-from tkinter import ttk
+from tkinter import RIGHT, ttk
 from PIL import ImageTk, Image
 from tkinter import END, scrolledtext
 from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab, selectedCheckListInRemoveTab
@@ -11,6 +11,7 @@ from ITM.Frame.MiddleFrame import MiddleFrame
 # Low frame : low side tabbed pane (tools)
 #------------------------------------------------------------------------------
 class LowFrame:
+    trtab_text_list = None
     remove_tab_text_list = None
     write_tab_text_list = None
     write_tab_text_org = None
@@ -30,15 +31,20 @@ class LowFrame:
         # create frames
         low_frm_remove_tab = ttk.Frame(low_frm, height=50)
         low_frm_write_tab = ttk.Frame(low_frm, height=50)
-        low_frm_remove_tab = low_frm_remove_tab
-        low_frm_write_tab = low_frm_write_tab
+        low_frm_trans_tab = ttk.Frame(low_frm, height=50)
 
         low_frm_remove_tab.pack(fill='both', expand=True)
         low_frm_write_tab.pack(fill='both', expand=True)
+        low_frm_trans_tab.pack(fill='both', expand=True)
 
         # add frames to notebook
+        low_frm.add(low_frm_trans_tab, text='번역 도구')
         low_frm.add(low_frm_remove_tab, text='지우기 도구')
         low_frm.add(low_frm_write_tab, text='쓰기 도구')
+
+        # init trans tab
+        from ITM.Frame.LowFrameTransTab import LowFrameTransTab
+        LowFrameTransTab.init(low_frm_trans_tab)
 
         # init remove tab
         self.__initRemoveTab(low_frm_remove_tab)
@@ -189,6 +195,19 @@ from enum import Enum, auto
 class ScrollableListType(Enum):
     CHECK_BUTTON = auto()
     RADIO_BUTTON = auto()
+
+class ScrollableText(tk.Frame):
+    # note : the following 2 variables should be reset when image changes
+    #        - list_values
+    #        - text
+    def __init__(self, root, *args, **kwargs):
+        tk.Frame.__init__(self, root, *args, **kwargs)
+        self.root = root
+        self.vsb = ttk.Scrollbar(self, orient="vertical")
+        self.text = tk.Text(self, width=40, height=20, yscrollcommand=self.vsb.set)
+        self.vsb.config(command=self.text.yview)
+        self.vsb.pack(side="right", fill="y")
+        self.text.pack(side="left", fill="both", expand=True)
 
 class ScrollableList(tk.Frame):
     # note : the following 2 variables should be reset when image changes
