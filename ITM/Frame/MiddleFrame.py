@@ -43,7 +43,7 @@ class CanvasWorkier:
                     int(self.scale_ratio*end_pos[0]),    # end x
                     int(self.scale_ratio*end_pos[1]),    # end y
                     #outline='green'
-                    outline='#00ff00'
+                    outline='#55ff55'
                 )
             idx = idx + 1
     
