@@ -66,8 +66,8 @@ def __translate_by_papago(text):
     if(rescode==200):
         response_body = response.read()
         res = json.loads(response_body.decode('utf-8'))
-        from pprint import pprint
-        pprint(res)
+        #from pprint import pprint
+        #pprint(res)
         result = res['message']['result']['translatedText']
         return result
     else:
