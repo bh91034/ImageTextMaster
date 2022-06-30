@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
 from tkinter import END, scrolledtext
-from ITM.Control.LowFrameControl import clickedCheckAll, clickedTextSearch, clickedUncheckAll, selectedCheckList
+from ITM.Control.LowFrameControl import clickedCheckAll, clickedTextSearch, clickedUncheckAll, selectedCheckList, clickedTranslate
 from ITM.Data.DataManager import DataManager
 from ITM.Frame.MiddleFrame import MiddleFrame
 
@@ -26,11 +26,12 @@ class LowFrame:
         btn_low_frm_search = ttk.Button(low_frm_up, text='텍스트 찾기', command=clickedTextSearch)
         btn_low_frm_check_all = ttk.Button(low_frm_up, text='전체 선택', command=clickedCheckAll)
         btn_low_frm_uncheck_all = ttk.Button(low_frm_up, text='전체 해제', command=clickedUncheckAll)
-        #remove_tab_btn_revoke_img = ttk.Button(low_frm_up, text='선택 번역')
+        btn_low_frm_translate = ttk.Button(low_frm_up, text='선택 번역', command=clickedTranslate)
 
         btn_low_frm_search.pack(side='left')
         btn_low_frm_check_all.pack(side='left')
         btn_low_frm_uncheck_all.pack(side='left')
+        btn_low_frm_translate.pack(side='left')
 
         low_frm_down = ttk.Frame(low_frm)
         low_frm_down.pack(padx=2, pady=2, fill='both', expand=True)

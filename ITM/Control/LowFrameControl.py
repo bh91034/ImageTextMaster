@@ -21,6 +21,21 @@ def selectedCheckList(text):
     LowFrame.low_frm_text_center.reset(text_list)
     LowFrame.low_frm_text_right.reset()
 
+def clickedTranslate():
+    from ITM.Frame.LowFrame import LowFrame
+    import googletrans
+    from googletrans import Translator
+
+    # get text
+    text = LowFrame.low_frm_text_center.text.get('1.0', 'end')
+
+    # check availability
+    if text is not None and len(text) > 0:
+        translator = Translator()
+        result_text = translator.translate(text, dest='ko')
+        LowFrame.low_frm_text_right.reset([result_text.text])
+    return
+
 def clickedCheckAll():
     from ITM.Frame.LowFrame import LowFrame
     LowFrame.low_frm_text_left.checkAll()
