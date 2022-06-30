@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
 from tkinter import END, scrolledtext
-from ITM.Control.LowFrameControl import clickedTextSearch, selectedCheckList
+from ITM.Control.LowFrameControl import clickedCheckAll, clickedTextSearch, clickedUncheckAll, selectedCheckList
 from ITM.Data.DataManager import DataManager
 from ITM.Frame.MiddleFrame import MiddleFrame
 
@@ -24,8 +24,8 @@ class LowFrame:
         low_frm_up.pack(padx=2, pady=2, fill='both', side='top')
         
         btn_low_frm_search = ttk.Button(low_frm_up, text='텍스트 찾기', command=clickedTextSearch)
-        btn_low_frm_check_all = ttk.Button(low_frm_up, text='전체 선택')
-        btn_low_frm_uncheck_all = ttk.Button(low_frm_up, text='전체 해제')
+        btn_low_frm_check_all = ttk.Button(low_frm_up, text='전체 선택', command=clickedCheckAll)
+        btn_low_frm_uncheck_all = ttk.Button(low_frm_up, text='전체 해제', command=clickedUncheckAll)
         #remove_tab_btn_revoke_img = ttk.Button(low_frm_up, text='선택 번역')
 
         btn_low_frm_search.pack(side='left')
@@ -75,6 +75,18 @@ class ScrollableList(tk.Frame):
 
     def __getIndexedText(self, idx, text):
         return str(idx) + '|' + text
+    
+    def checkAll(self):
+        if self.list_values is None:
+            return
+        for i in self.list_values:
+            i.set(True)
+
+    def uncheckAll(self):
+        if self.list_values is None:
+            return
+        for i in self.list_values:
+            i.set(False)
     
     def reset(self, text_list=None):
         self.text.delete('1.0', END)

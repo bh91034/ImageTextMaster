@@ -17,6 +17,16 @@ def selectedCheckList(text):
     from ITM.Control.ControlManager import ControlManager
     MiddleFrame.resetCanvasImages(ControlManager.work_file)
 
+def clickedCheckAll():
+    from ITM.Frame.LowFrame import LowFrame
+    LowFrame.low_frm_text_list.checkAll()
+    MiddleFrame.redrawCanvasImages()
+
+def clickedUncheckAll():
+    from ITM.Frame.LowFrame import LowFrame
+    LowFrame.low_frm_text_list.uncheckAll()
+    MiddleFrame.redrawCanvasImages()
+
 def clickedTextSearch():
     print ('[LowFrameControl] clickedTextSearch() called!!...')
 
