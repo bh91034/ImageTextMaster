@@ -17,14 +17,22 @@ def selectedCheckList(text):
     from ITM.Control.ControlManager import ControlManager
     MiddleFrame.resetCanvasImages(ControlManager.work_file)
 
+    text_list = LowFrame.low_frm_text_left.getCheckedTexts()
+    LowFrame.low_frm_text_center.reset(text_list)
+    LowFrame.low_frm_text_right.reset()
+
 def clickedCheckAll():
     from ITM.Frame.LowFrame import LowFrame
-    LowFrame.low_frm_text_list.checkAll()
+    LowFrame.low_frm_text_left.checkAll()
+    LowFrame.low_frm_text_center.reset(LowFrame.low_frm_text_left.text_list)
+    LowFrame.low_frm_text_right.reset()
     MiddleFrame.redrawCanvasImages()
 
 def clickedUncheckAll():
     from ITM.Frame.LowFrame import LowFrame
-    LowFrame.low_frm_text_list.uncheckAll()
+    LowFrame.low_frm_text_left.uncheckAll()
+    LowFrame.low_frm_text_center.reset()
+    LowFrame.low_frm_text_right.reset()
     MiddleFrame.redrawCanvasImages()
 
 def clickedTextSearch():

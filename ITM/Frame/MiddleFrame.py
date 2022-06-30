@@ -31,10 +31,10 @@ class CanvasWorkier:
         from ITM.Control.ControlManager import ControlManager
         # draw lines for selected text in check list of remove tab in LowFrame
         idx = 0
-        list_values = LowFrame.low_frm_text_list.list_values
+        list_values = LowFrame.low_frm_text_left.list_values
         if list_values == None or len(list_values) == 0:
             return
-        for item in LowFrame.low_frm_text_list.list_values:
+        for item in LowFrame.low_frm_text_left.list_values:
             if item.get() == True:
                 start_pos, end_pos = DataManager.getBorderInfoOfText(ControlManager.work_file, idx)
                 self.canvas.cnvs.create_rectangle(

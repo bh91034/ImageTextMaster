@@ -11,7 +11,7 @@ from ITM.Frame.MiddleFrame import MiddleFrame
 # Low frame : low side tabbed pane (tools)
 #------------------------------------------------------------------------------
 class LowFrame:
-    low_frm_text_list = None
+    low_frm_text_left = None
 
     def __init__(self, root):
         from ITM.Frame.MiddleFrame import MiddleFrame
@@ -36,21 +36,52 @@ class LowFrame:
         low_frm_down.pack(padx=2, pady=2, fill='both', expand=True)
 
         txt_low_frm_left = ScrollableList(low_frm_down, ScrollableListType.CHECK_BUTTON)
+        txt_low_frm_center = ScrollableText(low_frm_down)
+        txt_low_frm_right = ScrollableText(low_frm_down)
 
-        txt_low_frm_left.pack(side="top", fill="both", expand=True)
+        txt_low_frm_left.pack(side="left", fill="both", expand=True)
+        txt_low_frm_center.pack(side="left", fill="both", expand=True)
+        txt_low_frm_right.pack(side="left", fill="both", expand=True)
         txt_low_frm_left.reset()
-        LowFrame.low_frm_text_list = txt_low_frm_left
+        LowFrame.low_frm_text_left = txt_low_frm_left
+        LowFrame.low_frm_text_center = txt_low_frm_center
+        LowFrame.low_frm_text_right = txt_low_frm_right
 
     @classmethod
     def getStatusOfCheckListInRemoveTab(cls, idx):
         print ('[LowFrame] getStatusOfCheckListInRemoveTab() called...')
-        return cls.low_frm_text_list.list_values[idx]
+        return cls.low_frm_text_left.list_values[idx]
     
     @classmethod
     def resetRemoveTabData(cls, texts=None):
         print ('[LowFrame] resetRemoveTabData() called...')
         print ('[LowFrame] resetRemoveTabData() : texts=', texts)
-        cls.low_frm_text_list.reset(texts)
+        cls.low_frm_text_left.reset(texts)
+
+
+class ScrollableText(tk.Frame):
+    # note : the following 2 variables should be reset when image changes
+    #        - list_values
+    #        - text
+    def __init__(self, root, *args, **kwargs):
+        tk.Frame.__init__(self, root, *args, **kwargs)
+        self.root = root
+        self.vsb = ttk.Scrollbar(self, orient="vertical")
+        self.text = tk.Text(self, width=40, height=20, 
+                            yscrollcommand=self.vsb.set)
+        self.vsb.config(command=self.text.yview)
+        self.vsb.pack(side="right", fill="y")
+        self.text.pack(side="left", fill="both", expand=True)
+
+    def reset(self, text_list=None):
+        self.text.delete('1.0', END)
+
+        if text_list is None:
+            return
+        idx = 0
+        for t in text_list:
+            self.text.insert(END, t + "\n")
+            idx = idx + 1
 
 from enum import Enum, auto
 class ScrollableListType(Enum):
@@ -88,9 +119,17 @@ class ScrollableList(tk.Frame):
         for i in self.list_values:
             i.set(False)
     
+    def getCheckedTexts(self):
+        checked_list = []
+        for i in range(len(self.text_list)):
+            if self.list_values[i].get() is True:
+                checked_list.append(self.text_list[i])
+        return checked_list
+    
     def reset(self, text_list=None):
         self.text.delete('1.0', END)
         self.list_values = []
+        self.text_list = text_list
         print ('[LowFrame.ScrollableList] reset() called!!...')
         print ('[LowFrame.ScrollableList] reset() : text_list=', text_list)
         
