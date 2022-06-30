@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import ImageTk, Image
 from tkinter import END, scrolledtext
-from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab, selectedCheckListInRemoveTab
+from ITM.Control.LowFrameControl import clickedTextSearch, selectedCheckList
 from ITM.Data.DataManager import DataManager
 from ITM.Frame.MiddleFrame import MiddleFrame
 
@@ -23,7 +23,7 @@ class LowFrame:
         low_frm_up = ttk.Frame(low_frm, height=50)
         low_frm_up.pack(padx=2, pady=2, fill='both', side='top')
         
-        btn_low_frm_search = ttk.Button(low_frm_up, text='텍스트 찾기', command=clickedTextSearchInRemoveTab)
+        btn_low_frm_search = ttk.Button(low_frm_up, text='텍스트 찾기', command=clickedTextSearch)
         btn_low_frm_check_all = ttk.Button(low_frm_up, text='전체 선택')
         btn_low_frm_uncheck_all = ttk.Button(low_frm_up, text='전체 해제')
         #remove_tab_btn_revoke_img = ttk.Button(low_frm_up, text='선택 번역')
@@ -92,7 +92,7 @@ class ScrollableList(tk.Frame):
                 if self.list_type == ScrollableListType.CHECK_BUTTON:
                     # Reference : checkbutton example getting value in callback
                     # - https://arstechnica.com/civis/viewtopic.php?t=69728
-                    cb = tk.Checkbutton(self, text=t, command=lambda i=self.__getIndexedText(idx,t): selectedCheckListInRemoveTab(i), var=self.list_values[idx])
+                    cb = tk.Checkbutton(self, text=t, command=lambda i=self.__getIndexedText(idx,t): selectedCheckList(i), var=self.list_values[idx])
                 elif self.list_type == ScrollableListType.RADIO_BUTTON:
                     cb = tk.Radiobutton(self, text=t)
                 else:

@@ -2,7 +2,7 @@ from tkinter import messagebox as mb
 
 from ITM.Frame.MiddleFrame import MiddleFrame
 
-def selectedCheckListInRemoveTab(text):
+def selectedCheckList(text):
     from ITM.Frame.LowFrame import LowFrame
     print ('[LowFrameControl] selectedCheckListInRemoveTab() called!!...')
     text_info = text.split('|', 1)
@@ -17,8 +17,8 @@ def selectedCheckListInRemoveTab(text):
     from ITM.Control.ControlManager import ControlManager
     MiddleFrame.resetCanvasImages(ControlManager.work_file)
 
-def clickedTextSearchInRemoveTab():
-    print ('[LowFrameControl] clickedTextSearchInRemoveTab() called!!...')
+def clickedTextSearch():
+    print ('[LowFrameControl] clickedTextSearch() called!!...')
 
     # check error case
     from ITM.Control.ControlManager import ControlManager
