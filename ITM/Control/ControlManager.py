@@ -21,9 +21,6 @@ class ControlManager:
         # clear all data in 'remove tab' of 'LowFrame'
         LowFrame.resetRemoveTabData()
 
-        # clear all data in 'write tab' of 'LowFrame'
-        LowFrame.resetWriteTabData()
-
         # change images in cavases of 'MiddleFrame' with the 1st image of new dir
         MiddleFrame.resetCanvasImages(work_file)
 
