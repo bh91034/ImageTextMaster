@@ -18,9 +18,9 @@ class LowFrame:
 
         # create frames
         low_frm = ttk.Frame(root, height=50)
-        low_frm.pack(fill='both', expand=True)
+        low_frm.pack(fill='both')
 
-        low_frm_up = ttk.Frame(low_frm)
+        low_frm_up = ttk.Frame(low_frm, height=50)
         low_frm_up.pack(padx=2, pady=2, fill='both', side='top')
         
         btn_low_frm_search = ttk.Button(low_frm_up, text='텍스트 찾기', command=clickedTextSearchInRemoveTab)
