@@ -1,6 +1,6 @@
 from msilib.schema import Control
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, IntVar
 from tkinter import Tk, font
 from tkinter import colorchooser
 
@@ -275,6 +275,7 @@ class ScrollableList(tk.Frame):
         
         if text_list is not None:
             idx = 0
+            self.radio_value = IntVar()
             self.list_values = [None] * len(text_list)
             for i in range(len(text_list)):
                 self.list_values[i] = tk.BooleanVar()
@@ -285,7 +286,7 @@ class ScrollableList(tk.Frame):
                     # - https://arstechnica.com/civis/viewtopic.php?t=69728
                     cb = tk.Checkbutton(self, text=t, command=lambda i=self.__getIndexedText(idx,t): selectedCheckListInRemoveTab(i), var=self.list_values[idx])
                 elif self.list_type == ScrollableListType.RADIO_BUTTON:
-                    cb = tk.Radiobutton(self, text=t, command=lambda i=self.__getIndexedText(idx,t): selectedRadioListInRemoveTab(i), var=self.list_values[idx])
+                    cb = tk.Radiobutton(self, text=t, command=lambda i=self.__getIndexedText(idx,t): selectedRadioListInRemoveTab(i), variable=self.radio_value, value=idx)
                 else:
                     cb = tk.Checkbutton(self, text=t)
                 self.text.window_create("end", window=cb)
