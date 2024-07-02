@@ -1,6 +1,8 @@
 from msilib.schema import Control
 import tkinter as tk
 from tkinter import ttk
+from tkinter import Tk, font
+from tkinter import colorchooser
 
 import googletrans
 from googletrans import Translator
@@ -12,6 +14,13 @@ from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab, selectedCh
 from ITM.Data.DataManager import DataManager
 from ITM.Frame.MiddleFrame import MiddleFrame
 
+# Function that will be invoked when the
+# button will be clicked in the main window
+def choose_color():
+    # variable to store hexadecimal code of color
+    color_code = colorchooser.askcolor(title ="Choose color") 
+    LowFrame.resetColorOfButtonInWriteTab(color=color_code[1])
+
 ENABLE_PROXY = False
 #------------------------------------------------------------------------------
 # Low frame : low side tabbed pane (tools)
@@ -22,6 +31,7 @@ class LowFrame:
     write_tab_text_org = None
     write_tab_text_google = None
     write_tab_text_final = None
+    button_color = None
     notebook = None
     def __init__(self, root):
         # create a notebook
@@ -106,13 +116,29 @@ class LowFrame:
         write_tab_right_label_font_color = ttk.Label(b, text='폰트 색상 :')
         write_tab_right_label_font_color.grid(column=0, row=4, columnspan=2, sticky=tk.W)
 
-        button_color = tk.Button(b, text='...', bg='yellow')
+        button_color = tk.Button(b, text='...', bg='yellow', command = choose_color)
         button_color.grid(column=0, row=5, columnspan=1, sticky=tk.W+tk.E)
+        LowFrame.button_color = button_color
 
         write_tab_right_btn_apply = ttk.Button(c, text='적용')
         write_tab_right_btn_apply.pack(side='left')
         write_tab_right_btn_cancel = ttk.Button(c, text='취소')
         write_tab_right_btn_cancel.pack(side='left')
+
+        # init font list
+        font_list = font.families()
+        combo_box['values'] = font_list
+        try:
+            default_font_index = font_list.index('맑은 고딕')
+        except ValueError as e:
+            default_font_index = 0
+        combo_box.current(default_font_index)
+
+        # init font size list
+        font_size_list = tuple(range(5, 30))
+        combo_box2['values'] = font_size_list
+        combo_box2.current(5)
+
 
     # low frame write tab - [CENTER] translation tool
     def __initWriteTabTranslationTool(self, low_frm_write_tab):
@@ -212,6 +238,10 @@ class LowFrame:
         cls.write_tab_text_final.insert("end", result.text)
         
         # TODO: clear 'style tool' area
+
+    @classmethod
+    def resetColorOfButtonInWriteTab(cls, color='#FFFF00'):
+        LowFrame.button_color.configure(bg=color)
 
 from enum import Enum, auto
 class ScrollableListType(Enum):
