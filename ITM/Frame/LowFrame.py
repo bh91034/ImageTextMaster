@@ -1,12 +1,18 @@
 from msilib.schema import Control
 import tkinter as tk
 from tkinter import ttk
+
+import googletrans
+from googletrans import Translator
+from httpcore import SyncHTTPProxy
+
 from PIL import ImageTk, Image
 from tkinter import END, scrolledtext
-from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab, selectedCheckListInRemoveTab
+from ITM.Control.LowFrameControl import clickedTextSearchInRemoveTab, selectedCheckListInRemoveTab, selectedRadioListInRemoveTab
 from ITM.Data.DataManager import DataManager
 from ITM.Frame.MiddleFrame import MiddleFrame
 
+ENABLE_PROXY = False
 #------------------------------------------------------------------------------
 # Low frame : low side tabbed pane (tools)
 #------------------------------------------------------------------------------
@@ -172,17 +178,39 @@ class LowFrame:
         cls.remove_tab_text_list.reset(texts)
 
     @classmethod
-    def resetWriteTabData(cls):
+    def resetWriteTabData(cls, texts=None):
         print ('[LowFrame.resetWriteTabData] called...')
 
         # clear test list found in the image
-        cls.write_tab_text_list.reset(None)
+        cls.write_tab_text_list.reset(texts)
 
         # clear 'translation tool' area
         cls.write_tab_text_org.delete('1.0', END)
         cls.write_tab_text_google.delete('1.0', END)
         cls.write_tab_text_final.delete('1.0', END)
 
+    @classmethod
+    def resetTranslationTargetTextInWriteTab(cls, text=None):
+        # clear 'translation tool' area
+        cls.write_tab_text_org.delete('1.0', END)
+        cls.write_tab_text_google.delete('1.0', END)
+        cls.write_tab_text_final.delete('1.0', END)
+
+        # set text to original text area
+        cls.write_tab_text_org.insert("end", text)
+        
+        # translate it
+        if ENABLE_PROXY:
+            proxies_def = {'https': SyncHTTPProxy((b'http', b'www-proxy.us.oracle.com', 80, b''))}
+            translator = googletrans.Translator(proxies=proxies_def)
+        else:
+            translator = Translator()
+        result = translator.translate(text, dest='ko')
+        
+        # set result text to 
+        cls.write_tab_text_google.insert("end", result.text)
+        cls.write_tab_text_final.insert("end", result.text)
+        
         # TODO: clear 'style tool' area
 
 from enum import Enum, auto
@@ -227,7 +255,7 @@ class ScrollableList(tk.Frame):
                     # - https://arstechnica.com/civis/viewtopic.php?t=69728
                     cb = tk.Checkbutton(self, text=t, command=lambda i=self.__getIndexedText(idx,t): selectedCheckListInRemoveTab(i), var=self.list_values[idx])
                 elif self.list_type == ScrollableListType.RADIO_BUTTON:
-                    cb = tk.Radiobutton(self, text=t)
+                    cb = tk.Radiobutton(self, text=t, command=lambda i=self.__getIndexedText(idx,t): selectedRadioListInRemoveTab(i), var=self.list_values[idx])
                 else:
                     cb = tk.Checkbutton(self, text=t)
                 self.text.window_create("end", window=cb)
