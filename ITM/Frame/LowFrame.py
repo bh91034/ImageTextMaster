@@ -273,6 +273,7 @@ class ScrollableList(tk.Frame):
         print ('[LowFrame.ScrollableList] reset() called!!...')
         print ('[LowFrame.ScrollableList] reset() : text_list=', text_list)
         
+        self.radio_value = None
         if text_list is not None:
             idx = 0
             self.radio_value = IntVar()

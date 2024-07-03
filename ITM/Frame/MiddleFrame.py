@@ -52,16 +52,17 @@ class CanvasWorkier:
                     )
                 idx = idx + 1
         if tab_idx == 1:
-            idx = LowFrame.write_tab_text_list.radio_value.get()
-            start_pos, end_pos = DataManager.getBorderInfoOfText(ControlManager.work_file, idx)
-            self.canvas.create_rectangle(
-                int(self.scale_ratio*start_pos[0]),  # start x 
-                int(self.scale_ratio*start_pos[1]),  # start y
-                int(self.scale_ratio*end_pos[0]),    # end x
-                int(self.scale_ratio*end_pos[1]),    # end y
-                #outline='blue'
-                outline='#0000ff'
-            )
+            if LowFrame.write_tab_text_list is not None and LowFrame.write_tab_text_list.radio_value is not None:
+                idx = LowFrame.write_tab_text_list.radio_value.get()
+                start_pos, end_pos = DataManager.getBorderInfoOfText(ControlManager.work_file, idx)
+                self.canvas.create_rectangle(
+                    int(self.scale_ratio*start_pos[0]),  # start x 
+                    int(self.scale_ratio*start_pos[1]),  # start y
+                    int(self.scale_ratio*end_pos[0]),    # end x
+                    int(self.scale_ratio*end_pos[1]),    # end y
+                    #outline='blue'
+                    outline='#0000ff'
+                )
     
     def changeImageFile(self, img_file):
         self.img_file = img_file
