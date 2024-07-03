@@ -66,7 +66,20 @@ class LowFrame:
         from ITM.Control.ControlManager import ControlManager
         print ('[LowFrame] __tabChanged() called...')
         MiddleFrame.resetCanvasImages(ControlManager.work_file)
-    
+        
+        from ITM.Frame.LowFrame import LowFrame
+        tab_idx = LowFrame.notebook.index(LowFrame.notebook.select())
+
+        if tab_idx == 1:
+            # write text to original text area of write tab in low frame
+            radiobuttons = LowFrame.write_tab_text_list
+            if radiobuttons is not None and radiobuttons.radio_value is not None:
+                selected_idx = radiobuttons.radio_value.get()
+                target_string = LowFrame.write_tab_text_org.get("1.0",'end-1c')
+                if selected_idx == 0 and target_string is None or len(target_string) == 0:
+                    # write text to original text area of write tab in low frame
+                    LowFrame.resetTranslationTargetTextInWriteTab(radiobuttons.text_list[selected_idx])
+
     #------------------------------------------------------------------------------
     # Low frame - write tab : low frame write tab controls
     #------------------------------------------------------------------------------
@@ -270,6 +283,7 @@ class ScrollableList(tk.Frame):
     def reset(self, text_list=None):
         self.text.delete('1.0', END)
         self.list_values = []
+        self.text_list = text_list
         print ('[LowFrame.ScrollableList] reset() called!!...')
         print ('[LowFrame.ScrollableList] reset() : text_list=', text_list)
         
