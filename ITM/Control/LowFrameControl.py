@@ -19,6 +19,9 @@ def selectedRadioListInRemoveTab(text):
     from ITM.Frame.LowFrame import LowFrame
     LowFrame.resetTranslationTargetTextInWriteTab(selected_item_text)
 
+    from ITM.Control.ControlManager import ControlManager
+    MiddleFrame.resetCanvasImages(ControlManager.work_file)
+
 def selectedCheckListInRemoveTab(text):
     from ITM.Frame.LowFrame import LowFrame
     print ('[LowFrameControl] selectedCheckListInRemoveTab() called!!...')
