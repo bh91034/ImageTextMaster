@@ -23,6 +23,7 @@ def choose_color():
 
 def apply_style():
     print('##>> clicked.. apply text..')
+    print('##>> one more print..')
 
 ENABLE_PROXY = False
 #------------------------------------------------------------------------------
