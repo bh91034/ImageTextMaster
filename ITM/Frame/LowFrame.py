@@ -21,6 +21,9 @@ def choose_color():
     color_code = colorchooser.askcolor(title ="Choose color") 
     LowFrame.resetColorOfButtonInWriteTab(color=color_code[1])
 
+def apply_style():
+    print('##>> clicked.. apply text..')
+
 ENABLE_PROXY = False
 #------------------------------------------------------------------------------
 # Low frame : low side tabbed pane (tools)
@@ -31,6 +34,7 @@ class LowFrame:
     write_tab_text_org = None
     write_tab_text_google = None
     write_tab_text_final = None
+    write_tab_right_btn_apply = None
     button_color = None
     notebook = None
     def __init__(self, root):
@@ -133,10 +137,12 @@ class LowFrame:
         button_color.grid(column=0, row=5, columnspan=1, sticky=tk.W+tk.E)
         LowFrame.button_color = button_color
 
-        write_tab_right_btn_apply = ttk.Button(c, text='적용')
+        write_tab_right_btn_apply = ttk.Button(c, text='적용', command = apply_style)
         write_tab_right_btn_apply.pack(side='left')
         write_tab_right_btn_cancel = ttk.Button(c, text='취소')
         write_tab_right_btn_cancel.pack(side='left')
+
+        LowFrame.write_tab_right_btn_apply = write_tab_right_btn_apply
 
         # init font list
         font_list = font.families()
