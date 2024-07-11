@@ -118,6 +118,8 @@ class DataManager:
         print ('[DataManager] saveOutputFile() : out_file=', out_file)
         
         if out_file is not None:
+            if out_file.lower().endswith(("png")) == False:
+                out_image = out_image.convert("RGB")
             out_image.save(out_file)
             return True
         return False
